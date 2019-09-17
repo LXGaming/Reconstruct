@@ -1,0 +1,116 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "4.0.4"
+    id "java"
+    id "signing"
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group = "io.github.lxgaming"
+archivesBaseName = "Reconstruct"
+version = "1.0.0"
+
+configurations {
+    provided {
+        compile.extendsFrom(provided)
+    }
+
+    build.dependsOn("signJar")
+    jar.enabled = false
+    jar.dependsOn("shadowJar")
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile("com.beust:jcommander:1.78")
+    compile("net.sf.proguard:proguard-base:6.1.1")
+    annotationProcessor("org.apache.logging.log4j:log4j-core:2.12.1")
+    compile("org.apache.logging.log4j:log4j-core:2.12.1")
+    compile("org.apache.logging.log4j:log4j-slf4j-impl:2.12.1")
+    compile("org.fusesource.jansi:jansi:1.18")
+    testCompile("org.junit.jupiter:junit-jupiter-engine:5.5.2")
+    compile("org.ow2.asm:asm-commons:7.1")
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "io.github.lxgaming.reconstruct.Main")
+    }
+
+    from {
+        (configurations.compile - configurations.provided).findAll({
+            it.isDirectory() || it.name.endsWith(".jar")
+        }).collect({
+            it.isDirectory() ? it : zipTree(it)
+        })
+    }
+}
+
+processResources {
+    from("LICENSE")
+    rename("LICENSE", "LICENSE-" + archivesBaseName)
+}
+
+shadowJar {
+    classifier = null
+    configurations = [project.configurations.compile]
+
+    exclude {
+        // Exclude the Log4j2Plugins.dat file so logging works. Log4j2PluginsCacheFileTransformer doesn't work.
+        if (it.path.equals("META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat")) {
+            return true
+        }
+
+        // Exclude all ProGuard class files except the MappingProcessor & MappingReader
+        if (it.name.endsWith(".class") && it.path.startsWith("proguard/")) {
+            return !(it.path.equals("proguard/obfuscate/MappingProcessor.class") || it.path.equals("proguard/obfuscate/MappingReader.class"))
+        }
+
+        return false
+    }
+}
+
+test {
+    testLogging {
+        exceptionFormat = "full"
+        showStandardStreams = true
+    }
+    
+    useJUnitPlatform()
+}
+
+task signJar {
+    doFirst {
+        if (!project.hasProperty("signing.keyStorePath") || !project.hasProperty("signing.secretKeyRingFile")) {
+            project.logger.warn("========== [WARNING] ==========")
+            project.logger.warn("")
+            project.logger.warn("   This build is not signed!   ")
+            project.logger.warn("")
+            project.logger.warn("========== [WARNING] ==========")
+            throw new StopExecutionException()
+        }
+    }
+
+    doLast {
+        configurations.archives.allArtifacts.files.each {
+            ant.signjar(
+                jar: it,
+                alias: project.property("signing.alias"),
+                storepass: project.property("signing.keyStorePassword"),
+                keystore: project.property("signing.keyStorePath"),
+                keypass: project.property("signing.keyStorePassword"),
+                preservelastmodified: project.property("signing.preserveLastModified"),
+                tsaurl: project.property("signing.timestampAuthority"),
+                digestalg: project.property("signing.digestAlgorithm")
+            )
+            project.logger.lifecycle("JAR Signed: " + it.name)
+
+            signing.sign(it)
+            project.logger.lifecycle("PGP Signed: " + it.name)
+        }
+    }
+}
