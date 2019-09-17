@@ -1,0 +1,91 @@
+# Build
+.checkstyle
+MANIFEST.MF
+dependency-reduced-pom.xml
+
+# Compiled
+/target
+bin
+build
+dist
+lib
+out
+run
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Databases
+*.db
+*.sql
+*.sqlite
+
+# Logging
+/logs
+*.log
+
+# Misc
+*.bak
+
+# Packages
+*.7z
+*.cab
+*.dmg
+*.gz
+*.iso
+*.msi
+*.msm
+*.msp
+*.rar
+*.tar
+*.zip
+
+# Project
+.classpath
+.externalToolBuilders
+.gradle
+.idea
+.nb-gradle
+.project
+.settings
+atlassian-ide-plugin.xml
+build.bat
+build.ps1
+build.xml
+local.properties
+nb-configuration.xml
+nbproject
+*.iml
+*.ipr
+*.iws
+*.launch
+
+# Repository
+.git
+
+# System - macOS
+.AppleDB
+.AppleDesktop
+.AppleDouble
+.DS_Store
+.DocumentRevisions-V100
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+._*
+.apdisk
+.fseventsd
+Network Trash Folder
+Temporary Items
+
+# System - Windows
+$RECYCLE.BIN/
+Desktop.ini
+Thumbs.db
+ehthumbs.db
+*.lnk
