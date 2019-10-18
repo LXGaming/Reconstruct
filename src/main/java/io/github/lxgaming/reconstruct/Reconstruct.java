@@ -25,6 +25,7 @@ import io.github.lxgaming.reconstruct.transformer.ProGuardTransformer;
 import io.github.lxgaming.reconstruct.util.Arguments;
 import io.github.lxgaming.reconstruct.util.Reference;
 import io.github.lxgaming.reconstruct.util.ShutdownHook;
+import io.github.lxgaming.reconstruct.util.StringUtils;
 import io.github.lxgaming.reconstruct.util.Toolbox;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -122,7 +123,7 @@ public class Reconstruct {
                 
                 try (InputStream inputStream = jarFile.getInputStream(jarEntry)) {
                     String name = Toolbox.fromFileName(jarEntry.getName());
-                    if (Toolbox.startsWith(getArguments().getExcludedPackages(), name)) {
+                    if (StringUtils.startsWith(getArguments().getExcludedPackages(), name)) {
                         getLogger().debug("Skipping {}", name);
                         continue;
                     }
@@ -199,7 +200,7 @@ public class Reconstruct {
                         }
                         
                         String name = Toolbox.fromFileName(jarEntry.getName());
-                        if (Toolbox.startsWith(getArguments().getExcludedPackages(), name)) {
+                        if (StringUtils.startsWith(getArguments().getExcludedPackages(), name)) {
                             getLogger().debug("Skipping {}", name);
                             writeZipEntry(inputStream, outputStream, jarEntry);
                             continue;

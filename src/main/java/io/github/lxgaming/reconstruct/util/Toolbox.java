@@ -19,7 +19,6 @@ package io.github.lxgaming.reconstruct.util;
 import io.github.lxgaming.reconstruct.Reconstruct;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -138,20 +137,6 @@ public class Toolbox {
     
     public static String toJvmName(String name) {
         return name.replace('.', '/');
-    }
-    
-    public static boolean startsWith(Collection<String> collection, String targetString) {
-        if (collection == null || targetString == null) {
-            return false;
-        }
-        
-        for (String string : collection) {
-            if (targetString.startsWith(string)) {
-                return true;
-            }
-        }
-        
-        return false;
     }
     
     @SafeVarargs
