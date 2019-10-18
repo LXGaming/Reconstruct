@@ -123,6 +123,28 @@ public class Toolbox {
         }
     }
     
+    public static int countArguments(String descriptor) {
+        int arguments = 0;
+        // Skip the first character, which is always a '('
+        int index = 1;
+        
+        while (descriptor.charAt(index) != ')') {
+            while (descriptor.charAt(index) == '[') {
+                index += 1;
+            }
+            
+            if (descriptor.charAt(index) == 'L') {
+                index = descriptor.indexOf(';', index) + 1;
+            } else {
+                index += 1;
+            }
+            
+            arguments += 1;
+        }
+        
+        return arguments;
+    }
+    
     public static String fromFileName(String name) {
         return toJavaName(name.substring(0, name.lastIndexOf('.')));
     }

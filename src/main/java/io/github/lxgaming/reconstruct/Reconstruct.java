@@ -21,6 +21,7 @@ import io.github.lxgaming.reconstruct.bytecode.Attributes;
 import io.github.lxgaming.reconstruct.bytecode.RcClass;
 import io.github.lxgaming.reconstruct.data.Transform;
 import io.github.lxgaming.reconstruct.manager.TransformerManager;
+import io.github.lxgaming.reconstruct.transformer.NameTransformer;
 import io.github.lxgaming.reconstruct.transformer.ProGuardTransformer;
 import io.github.lxgaming.reconstruct.util.Arguments;
 import io.github.lxgaming.reconstruct.util.Reference;
@@ -103,6 +104,11 @@ public class Reconstruct {
         
         ProGuardTransformer proGuardTransformer = new ProGuardTransformer(arguments.getMappingPath());
         if (!TransformerManager.registerTransformer(proGuardTransformer)) {
+            return;
+        }
+        
+        NameTransformer nameTransformer = new NameTransformer();
+        if (!TransformerManager.registerTransformer(nameTransformer)) {
             return;
         }
         
