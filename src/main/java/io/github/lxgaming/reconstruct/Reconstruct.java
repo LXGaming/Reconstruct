@@ -31,7 +31,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -207,9 +206,9 @@ public class Reconstruct {
                         }
                         
                         ClassReader classReader = new ClassReader(inputStream);
-                        ClassWriter classWriter = new ClassWriter(0);
                         
-                        Transform transform = new Transform(classReader, classWriter);
+                        Transform transform = new Transform();
+                        transform.setClassReader(classReader);
                         transform.setClassName(name);
                         
                         if (!TransformerManager.process(transform)) {
@@ -218,7 +217,7 @@ public class Reconstruct {
                         }
                         
                         getLogger().info("Transformed {} -> {}", name, transform.getClassName());
-                        writeZipEntry(classWriter.toByteArray(), outputStream, Toolbox.toFileName(transform.getClassName()));
+                        writeZipEntry(transform.getClassWriter().toByteArray(), outputStream, Toolbox.toFileName(transform.getClassName()));
                     }
                 }
             }

@@ -25,6 +25,7 @@ import io.github.lxgaming.reconstruct.bytecode.RcMethod;
 import io.github.lxgaming.reconstruct.data.Transform;
 import io.github.lxgaming.reconstruct.transformer.proguard.MappingProcessorImpl;
 import io.github.lxgaming.reconstruct.transformer.proguard.RemapperImpl;
+import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.commons.ClassRemapper;
 import proguard.obfuscate.MappingReader;
 
@@ -93,6 +94,7 @@ public class ProGuardTransformer implements Transformer {
             transform.setClassName(currentClass.getName());
         }
         
+        transform.setClassWriter(new ClassWriter(0));
         ClassRemapper classRemapper = new ClassRemapper(transform.getClassWriter(), remapper);
         transform.getClassReader().accept(classRemapper, 0);
         transform.getClassWriter().visitEnd();

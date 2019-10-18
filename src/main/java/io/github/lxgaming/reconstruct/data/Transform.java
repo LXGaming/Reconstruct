@@ -21,21 +21,24 @@ import org.objectweb.asm.ClassWriter;
 
 public class Transform {
     
-    private final ClassReader classReader;
-    private final ClassWriter classWriter;
+    private ClassReader classReader;
+    private ClassWriter classWriter;
     private String className;
-    
-    public Transform(ClassReader classReader, ClassWriter classWriter) {
-        this.classReader = classReader;
-        this.classWriter = classWriter;
-    }
     
     public ClassReader getClassReader() {
         return classReader;
     }
     
+    public void setClassReader(ClassReader classReader) {
+        this.classReader = classReader;
+    }
+    
     public ClassWriter getClassWriter() {
         return classWriter;
+    }
+    
+    public void setClassWriter(ClassWriter classWriter) {
+        this.classWriter = classWriter;
     }
     
     public String getClassName() {
