@@ -1,3 +1,4 @@
+os: linux
 dist: trusty
 
 language: java
@@ -16,11 +17,10 @@ cache:
 before_install:
   - chmod +x ./gradlew
 
-install:
-  - ./gradlew --refresh-dependencies
+install: skip
 
 script:
-  - ./gradlew clean build
+  - ./gradlew clean build --console=plain --refresh-dependencies
 
 notifications:
   email: false
