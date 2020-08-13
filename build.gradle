@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "4.0.4"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
     id "java"
     id "signing"
 }
@@ -12,10 +12,6 @@ archivesBaseName = "Reconstruct"
 version = "1.0.0"
 
 configurations {
-    provided {
-        compile.extendsFrom(provided)
-    }
-
     build.dependsOn("signJar")
     jar.enabled = false
     jar.dependsOn("shadowJar")
@@ -26,48 +22,40 @@ repositories {
 }
 
 dependencies {
-    compile("com.beust:jcommander:1.78")
-    compile("net.sf.proguard:proguard-base:6.1.1")
+    shadow("com.beust:jcommander:1.78")
+    shadow("net.sf.proguard:proguard-base:6.1.1")
     annotationProcessor("org.apache.logging.log4j:log4j-core:2.12.1")
-    compile("org.apache.logging.log4j:log4j-core:2.12.1")
-    compile("org.apache.logging.log4j:log4j-slf4j-impl:2.12.1")
-    compile("org.fusesource.jansi:jansi:1.18")
+    shadow("org.apache.logging.log4j:log4j-core:2.12.1")
+    shadow("org.apache.logging.log4j:log4j-slf4j-impl:2.12.1")
+    shadow("org.fusesource.jansi:jansi:1.18")
     testCompile("org.junit.jupiter:junit-jupiter-engine:5.5.2")
-    compile("org.ow2.asm:asm-commons:7.1")
+    shadow("org.ow2.asm:asm-commons:7.1")
 }
 
 jar {
     manifest {
         attributes("Main-Class": "io.github.lxgaming.reconstruct.Main")
     }
-
-    from {
-        (configurations.compile - configurations.provided).findAll({
-            it.isDirectory() || it.name.endsWith(".jar")
-        }).collect({
-            it.isDirectory() ? it : zipTree(it)
-        })
-    }
 }
 
 processResources {
     from("LICENSE")
-    rename("LICENSE", "LICENSE-" + archivesBaseName)
+    rename("LICENSE", "LICENSE-${archivesBaseName}")
 }
 
 shadowJar {
-    classifier = null
-    configurations = [project.configurations.compile]
+    archiveClassifier.set(null)
+    configurations = [project.configurations.shadow]
 
     exclude {
         // Exclude the Log4j2Plugins.dat file so logging works. Log4j2PluginsCacheFileTransformer doesn't work.
-        if (it.path.equals("META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat")) {
+        if (it.path == "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat") {
             return true
         }
 
         // Exclude all ProGuard class files except the MappingProcessor & MappingReader
         if (it.name.endsWith(".class") && it.path.startsWith("proguard/")) {
-            return !(it.path.equals("proguard/obfuscate/MappingProcessor.class") || it.path.equals("proguard/obfuscate/MappingReader.class"))
+            return !(it.path == "proguard/obfuscate/MappingProcessor.class" || it.path == "proguard/obfuscate/MappingReader.class")
         }
 
         return false
@@ -75,11 +63,6 @@ shadowJar {
 }
 
 test {
-    testLogging {
-        exceptionFormat = "full"
-        showStandardStreams = true
-    }
-    
     useJUnitPlatform()
 }
 
