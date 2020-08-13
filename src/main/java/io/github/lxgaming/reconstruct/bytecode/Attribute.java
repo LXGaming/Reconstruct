@@ -20,19 +20,19 @@ import java.util.Objects;
 
 public final class Attribute {
     
-    private final Key key;
+    private final Key<?> key;
     private Object value;
     
-    Attribute(Key key) {
+    Attribute(Key<?> key) {
         this(key, null);
     }
     
-    Attribute(Key key, Object value) {
+    Attribute(Key<?> key, Object value) {
         this.key = key;
         this.value = value;
     }
     
-    public Key getKey() {
+    public Key<?> getKey() {
         return key;
     }
     
@@ -95,7 +95,7 @@ public final class Attribute {
                 return false;
             }
             
-            Key key = (Key) obj;
+            Key<?> key = (Key<?>) obj;
             return Objects.equals(getName(), key.getName())
                     && Objects.equals(getType(), key.getType());
         }
