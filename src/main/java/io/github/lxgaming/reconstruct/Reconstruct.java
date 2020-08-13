@@ -24,7 +24,6 @@ import io.github.lxgaming.reconstruct.manager.TransformerManager;
 import io.github.lxgaming.reconstruct.transformer.NameTransformer;
 import io.github.lxgaming.reconstruct.transformer.ProGuardTransformer;
 import io.github.lxgaming.reconstruct.util.Arguments;
-import io.github.lxgaming.reconstruct.util.Reference;
 import io.github.lxgaming.reconstruct.util.ShutdownHook;
 import io.github.lxgaming.reconstruct.util.StringUtils;
 import io.github.lxgaming.reconstruct.util.Toolbox;
@@ -55,6 +54,13 @@ import java.util.zip.ZipOutputStream;
 
 public class Reconstruct {
     
+    public static final String ID = "reconstruct";
+    public static final String NAME = "Reconstruct";
+    public static final String VERSION = "@version@";
+    public static final String AUTHORS = "LX_Gaming";
+    public static final String SOURCE = "https://github.com/LXGaming/Reconstruct";
+    public static final String WEBSITE = "https://lxgaming.github.io/";
+    
     private static Reconstruct instance;
     private final Logger logger;
     private final Arguments arguments;
@@ -62,7 +68,7 @@ public class Reconstruct {
     
     public Reconstruct() {
         instance = this;
-        this.logger = LogManager.getLogger(Reference.NAME);
+        this.logger = LogManager.getLogger(Reconstruct.NAME);
         this.arguments = new Arguments();
         this.classes = Toolbox.newHashSet();
     }
@@ -70,10 +76,10 @@ public class Reconstruct {
     public void load() {
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
         
-        getLogger().info("{} v{}", Reference.NAME, Reference.VERSION);
-        getLogger().info("Authors: {}", Reference.AUTHORS);
-        getLogger().info("Source: {}", Reference.SOURCE);
-        getLogger().info("Website: {}", Reference.WEBSITE);
+        getLogger().info("{} v{}", Reconstruct.NAME, Reconstruct.VERSION);
+        getLogger().info("Authors: {}", Reconstruct.AUTHORS);
+        getLogger().info("Source: {}", Reconstruct.SOURCE);
+        getLogger().info("Website: {}", Reconstruct.WEBSITE);
         
         if (arguments.isDebug()) {
             Configurator.setLevel(getLogger().getName(), Level.DEBUG);
@@ -190,7 +196,7 @@ public class Reconstruct {
                         if (jarEntry.getName().endsWith("MANIFEST.MF")) {
                             try (InputStream inputStream = jarFile.getInputStream(jarEntry)) {
                                 Manifest manifest = new Manifest(inputStream);
-                                manifest.getMainAttributes().putValue(Reference.NAME, Reference.VERSION);
+                                manifest.getMainAttributes().putValue(Reconstruct.NAME, Reconstruct.VERSION);
                                 // Exclude code signing digests
                                 manifest.getEntries().clear();
                                 writeZipEntry(getByteArray(manifest), outputStream, jarEntry.getName());

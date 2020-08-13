@@ -1,6 +1,7 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id "java"
+    id "net.kyori.blossom" version "1.1.0"
     id "signing"
 }
 
@@ -10,6 +11,10 @@ targetCompatibility = 1.8
 group = "io.github.lxgaming"
 archivesBaseName = "Reconstruct"
 version = "1.0.0"
+
+blossom {
+    replaceToken("@version@", version)
+}
 
 configurations {
     build.dependsOn("signJar")
