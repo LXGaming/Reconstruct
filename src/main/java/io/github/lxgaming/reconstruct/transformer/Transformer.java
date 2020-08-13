@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Alex Thomson
+ * Copyright 2020 Alex Thomson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,26 @@
 package io.github.lxgaming.reconstruct.transformer;
 
 import io.github.lxgaming.reconstruct.entity.Transform;
+import io.github.lxgaming.reconstruct.manager.TransformerManager;
 
-public interface Transformer {
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public abstract class Transformer {
     
-    boolean prepare();
+    private final Set<String> aliases = new LinkedHashSet<>();
     
-    void execute(Transform transform) throws Exception;
+    public abstract boolean initialize();
+    
+    public abstract boolean prepare();
+    
+    public abstract void execute(Transform transform) throws Exception;
+    
+    protected final void addAlias(String alias) {
+        TransformerManager.registerAlias(this, alias);
+    }
+    
+    public final Set<String> getAliases() {
+        return aliases;
+    }
 }

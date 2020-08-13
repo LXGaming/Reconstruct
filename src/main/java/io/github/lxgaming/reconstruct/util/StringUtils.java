@@ -20,6 +20,34 @@ import java.util.Collection;
 
 public class StringUtils {
     
+    public static boolean containsIgnoreCase(Collection<String> collection, String targetString) {
+        if (collection == null || collection.isEmpty()) {
+            return false;
+        }
+        
+        for (String string : collection) {
+            if (string.equalsIgnoreCase(targetString)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public static boolean containsIgnoreCase(Collection<String> collection, Collection<String> targetCollection) {
+        if (collection == null || collection.isEmpty() || targetCollection == null || targetCollection.isEmpty()) {
+            return false;
+        }
+        
+        for (String string : targetCollection) {
+            if (containsIgnoreCase(collection, string)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     /**
      * Removes non-printable characters (excluding new line and carriage return) in the provided {@link java.lang.String String}.
      *

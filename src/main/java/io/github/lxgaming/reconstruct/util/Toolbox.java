@@ -155,4 +155,20 @@ public class Toolbox {
     public static String toJvmName(String name) {
         return name.replace('.', '/');
     }
+    
+    public static String getClassSimpleName(Class<?> type) {
+        if (type.getEnclosingClass() != null) {
+            return getClassSimpleName(type.getEnclosingClass()) + "." + type.getSimpleName();
+        }
+        
+        return type.getSimpleName();
+    }
+    
+    public static <T> T newInstance(Class<? extends T> type) {
+        try {
+            return type.newInstance();
+        } catch (Throwable ex) {
+            return null;
+        }
+    }
 }

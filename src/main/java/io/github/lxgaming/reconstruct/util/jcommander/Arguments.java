@@ -31,6 +31,9 @@ public class Arguments {
     @Parameter(names = {"-agree"}, description = "Do not distribute confidential or proprietary information unless you have explicit permission from the copyright holder")
     private boolean agree = false;
     
+    @Parameter(names = {"-transformers"}, description = "Transformers to use during the deobfuscation process")
+    private List<String> transformers = null;
+    
     @Parameter(names = {"-jar"}, description = "Obfuscated Jar Path", required = true, converter = PathConverter.class)
     private Path jarPath = null;
     
@@ -49,6 +52,10 @@ public class Arguments {
     
     public boolean isAgree() {
         return agree;
+    }
+    
+    public List<String> getTransformers() {
+        return transformers;
     }
     
     public Path getJarPath() {

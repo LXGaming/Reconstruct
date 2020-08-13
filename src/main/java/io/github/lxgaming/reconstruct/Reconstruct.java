@@ -21,8 +21,6 @@ import io.github.lxgaming.reconstruct.bytecode.Attributes;
 import io.github.lxgaming.reconstruct.bytecode.RcClass;
 import io.github.lxgaming.reconstruct.entity.Transform;
 import io.github.lxgaming.reconstruct.manager.TransformerManager;
-import io.github.lxgaming.reconstruct.transformer.NameTransformer;
-import io.github.lxgaming.reconstruct.transformer.ProGuardTransformer;
 import io.github.lxgaming.reconstruct.util.ShutdownHook;
 import io.github.lxgaming.reconstruct.util.StringUtils;
 import io.github.lxgaming.reconstruct.util.Toolbox;
@@ -109,15 +107,7 @@ public class Reconstruct {
             Toolbox.readline("Press Enter to continue...");
         }
         
-        ProGuardTransformer proGuardTransformer = new ProGuardTransformer(arguments.getMappingPath());
-        if (!TransformerManager.registerTransformer(proGuardTransformer)) {
-            return;
-        }
-        
-        NameTransformer nameTransformer = new NameTransformer();
-        if (!TransformerManager.registerTransformer(nameTransformer)) {
-            return;
-        }
+        TransformerManager.prepare();
         
         if (!link(getArguments().getJarPath())) {
             return;
@@ -225,7 +215,7 @@ public class Reconstruct {
                         transform.setClassReader(classReader);
                         transform.setClassName(name);
                         
-                        if (!TransformerManager.process(transform)) {
+                        if (!TransformerManager.execute(transform)) {
                             writeZipEntry(inputStream, outputStream, jarEntry);
                             continue;
                         }

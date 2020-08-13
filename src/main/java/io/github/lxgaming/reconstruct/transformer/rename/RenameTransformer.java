@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Alex Thomson
+ * Copyright 2020 Alex Thomson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package io.github.lxgaming.reconstruct.transformer;
+package io.github.lxgaming.reconstruct.transformer.rename;
 
 import io.github.lxgaming.reconstruct.entity.Transform;
-import io.github.lxgaming.reconstruct.transformer.rename.ClassVisitorImpl;
+import io.github.lxgaming.reconstruct.transformer.Transformer;
 import org.objectweb.asm.ClassWriter;
 
-public class NameTransformer implements Transformer {
+public class RenameTransformer extends Transformer {
+    
+    @Override
+    public boolean initialize() {
+        addAlias("rename");
+        return true;
+    }
     
     @Override
     public boolean prepare() {

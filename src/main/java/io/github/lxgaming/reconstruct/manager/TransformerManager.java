@@ -19,17 +19,29 @@ package io.github.lxgaming.reconstruct.manager;
 import io.github.lxgaming.reconstruct.Reconstruct;
 import io.github.lxgaming.reconstruct.entity.Transform;
 import io.github.lxgaming.reconstruct.transformer.Transformer;
+import io.github.lxgaming.reconstruct.transformer.proguard.ProGuardTransformer;
+import io.github.lxgaming.reconstruct.transformer.rename.RenameTransformer;
+import io.github.lxgaming.reconstruct.util.StringUtils;
+import io.github.lxgaming.reconstruct.util.Toolbox;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public final class TransformerManager {
     
     private static final Set<Transformer> TRANSFORMERS = new LinkedHashSet<>();
+    private static final Set<Class<? extends Transformer>> TRANSFORMER_CLASSES = new HashSet<>();
     
-    public static boolean process(Transform transform) {
+    public static void prepare() {
+        registerTransformer(ProGuardTransformer.class);
+        registerTransformer(RenameTransformer.class);
+    }
+    
+    public static boolean execute(Transform transform) {
         String className = transform.getClassName();
         for (Transformer transformer : TRANSFORMERS) {
             try {
@@ -42,7 +54,7 @@ public final class TransformerManager {
                 
                 transformer.execute(transform);
             } catch (Exception ex) {
-                Reconstruct.getInstance().getLogger().error("{} encountered an error while processing {}", transformer.getClass().getSimpleName(), className, ex);
+                Reconstruct.getInstance().getLogger().error("{} encountered an error while processing {}", Toolbox.getClassSimpleName(transform.getClass()), className, ex);
                 return false;
             }
         }
@@ -55,29 +67,57 @@ public final class TransformerManager {
         return true;
     }
     
-    public static boolean registerTransformer(Transformer transformer) {
-        if (contains(transformer.getClass())) {
-            Reconstruct.getInstance().getLogger().warn("{} has already been registered", transformer.getClass().getSimpleName());
+    public static boolean registerAlias(Transformer transformer, String alias) {
+        if (StringUtils.containsIgnoreCase(transformer.getAliases(), alias)) {
+            Reconstruct.getInstance().getLogger().warn("{} is already registered for {}", alias, Toolbox.getClassSimpleName(transformer.getClass()));
             return false;
         }
         
-        if (!transformer.prepare()) {
-            Reconstruct.getInstance().getLogger().error("{} failed to prepare", transformer.getClass().getSimpleName());
+        transformer.getAliases().add(alias);
+        Reconstruct.getInstance().getLogger().debug("{} registered for {}", alias, Toolbox.getClassSimpleName(transformer.getClass()));
+        return true;
+    }
+    
+    public static boolean registerTransformer(Class<? extends Transformer> transformerClass) {
+        if (TRANSFORMER_CLASSES.contains(transformerClass)) {
+            Reconstruct.getInstance().getLogger().warn("{} is already registered", Toolbox.getClassSimpleName(transformerClass));
+            return false;
+        }
+        
+        TRANSFORMER_CLASSES.add(transformerClass);
+        Transformer transformer = Toolbox.newInstance(transformerClass);
+        if (transformer == null) {
+            Reconstruct.getInstance().getLogger().error("{} failed to initialize", Toolbox.getClassSimpleName(transformerClass));
+            return false;
+        }
+        
+        try {
+            if (!transformer.initialize()) {
+                Reconstruct.getInstance().getLogger().warn("{} failed to initialize", Toolbox.getClassSimpleName(transformerClass));
+                return false;
+            }
+        } catch (Exception ex) {
+            Reconstruct.getInstance().getLogger().error("Encountered an error while initializing {}", Toolbox.getClassSimpleName(transformerClass), ex);
+            return false;
+        }
+        
+        List<String> transformers = Reconstruct.getInstance().getArguments().getTransformers();
+        if (transformers != null && !transformers.isEmpty() && !StringUtils.containsIgnoreCase(transformers, transformer.getAliases())) {
+            return false;
+        }
+        
+        try {
+            if (!transformer.prepare()) {
+                Reconstruct.getInstance().getLogger().warn("{} failed to prepare", Toolbox.getClassSimpleName(transformerClass));
+                return false;
+            }
+        } catch (Exception ex) {
+            Reconstruct.getInstance().getLogger().error("Encountered an error while preparing {}", Toolbox.getClassSimpleName(transformerClass), ex);
             return false;
         }
         
         TRANSFORMERS.add(transformer);
-        Reconstruct.getInstance().getLogger().debug("{} registered", transformer.getClass().getSimpleName());
+        Reconstruct.getInstance().getLogger().debug("{} registered", Toolbox.getClassSimpleName(transformerClass));
         return true;
-    }
-    
-    private static boolean contains(Class<? extends Transformer> transformerClass) {
-        for (Transformer transformer : TRANSFORMERS) {
-            if (transformer.getClass().equals(transformerClass)) {
-                return true;
-            }
-        }
-        
-        return false;
     }
 }

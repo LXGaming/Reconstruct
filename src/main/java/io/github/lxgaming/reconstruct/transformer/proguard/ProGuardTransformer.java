@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Alex Thomson
+ * Copyright 2020 Alex Thomson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.lxgaming.reconstruct.transformer;
+package io.github.lxgaming.reconstruct.transformer.proguard;
 
 import io.github.lxgaming.reconstruct.Reconstruct;
 import io.github.lxgaming.reconstruct.bytecode.Attributes;
@@ -23,8 +23,7 @@ import io.github.lxgaming.reconstruct.bytecode.RcConstructor;
 import io.github.lxgaming.reconstruct.bytecode.RcField;
 import io.github.lxgaming.reconstruct.bytecode.RcMethod;
 import io.github.lxgaming.reconstruct.entity.Transform;
-import io.github.lxgaming.reconstruct.transformer.proguard.MappingProcessorImpl;
-import io.github.lxgaming.reconstruct.transformer.proguard.RemapperImpl;
+import io.github.lxgaming.reconstruct.transformer.Transformer;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.commons.ClassRemapper;
 import proguard.obfuscate.MappingReader;
@@ -33,18 +32,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class ProGuardTransformer implements Transformer {
+public class ProGuardTransformer extends Transformer {
     
-    private final Path path;
-    private final MappingProcessorImpl mappingProcessor;
-    
-    public ProGuardTransformer(Path path) {
-        this.path = path;
-        this.mappingProcessor = new MappingProcessorImpl();
+    @Override
+    public boolean initialize() {
+        addAlias("proguard");
+        return true;
     }
     
     @Override
     public boolean prepare() {
+        Path path = Reconstruct.getInstance().getArguments().getMappingPath();
+        if (path == null) {
+            return false;
+        }
+        
         if (!Files.isRegularFile(path)) {
             Reconstruct.getInstance().getLogger().error("Provided path is not a file");
             return false;
@@ -52,7 +54,7 @@ public class ProGuardTransformer implements Transformer {
         
         try {
             MappingReader mappingReader = new MappingReader(path.toFile());
-            mappingReader.pump(mappingProcessor);
+            mappingReader.pump(new MappingProcessorImpl());
             
             int constructors = 0;
             int fields = 0;
