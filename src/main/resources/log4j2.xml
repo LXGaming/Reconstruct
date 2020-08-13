@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" shutdownHook="disable" packages="io.github.lxgaming.reconstruct.util.log4j">
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
+        <Console name="Console">
             <PatternLayout pattern="%color{[%d{HH:mm:ss}] [%level] [%t]: %msg%n%xEx}"/>
         </Console>
-        <File name="File" fileName="logs/latest.log" append="false">
+        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%level] [%t]: %msg%n"/>
-        </File>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
     </Appenders>
     <Loggers>
         <Root level="ALL">

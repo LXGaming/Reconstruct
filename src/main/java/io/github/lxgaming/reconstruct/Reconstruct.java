@@ -83,10 +83,9 @@ public class Reconstruct {
         
         if (arguments.isDebug()) {
             Configurator.setLevel(getLogger().getName(), Level.DEBUG);
-            getLogger().debug("Debug mode enabled.");
+            getLogger().debug("Debug mode enabled");
         } else {
-            Configurator.setLevel(getLogger().getName(), Level.INFO);
-            getLogger().info("Debug mode disabled.");
+            getLogger().info("Debug mode disabled");
         }
         
         if (System.console() == null && !System.getProperty("java.class.path").contains("idea_rt.jar")) {
