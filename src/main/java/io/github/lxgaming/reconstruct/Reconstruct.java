@@ -25,7 +25,6 @@ import io.github.lxgaming.reconstruct.util.ShutdownHook;
 import io.github.lxgaming.reconstruct.util.StringUtils;
 import io.github.lxgaming.reconstruct.util.Toolbox;
 import io.github.lxgaming.reconstruct.util.jcommander.Arguments;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
@@ -82,7 +81,8 @@ public class Reconstruct {
         getLogger().info("Website: {}", Reconstruct.WEBSITE);
         
         if (arguments.isDebug()) {
-            Configurator.setLevel(getLogger().getName(), Level.DEBUG);
+            System.setProperty("reconstruct.logging.console.level", "DEBUG");
+            Configurator.reconfigure();
             getLogger().debug("Debug mode enabled");
         } else {
             getLogger().info("Debug mode disabled");

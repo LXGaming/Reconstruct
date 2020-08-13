@@ -14,8 +14,8 @@
     </Appenders>
     <Loggers>
         <Root level="ALL">
-            <AppenderRef ref="Console" level="INFO"/>
-            <AppenderRef ref="File" level="DEBUG"/>
+            <AppenderRef ref="Console" level="${sys:reconstruct.logging.console.level:-info}"/>
+            <AppenderRef ref="File" level="${sys:reconstruct.logging.file.level:-debug}"/>
         </Root>
     </Loggers>
 </Configuration>
