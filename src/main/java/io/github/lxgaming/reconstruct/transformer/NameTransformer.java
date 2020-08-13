@@ -16,7 +16,7 @@
 
 package io.github.lxgaming.reconstruct.transformer;
 
-import io.github.lxgaming.reconstruct.data.Transform;
+import io.github.lxgaming.reconstruct.entity.Transform;
 import io.github.lxgaming.reconstruct.transformer.rename.ClassVisitorImpl;
 import org.objectweb.asm.ClassWriter;
 

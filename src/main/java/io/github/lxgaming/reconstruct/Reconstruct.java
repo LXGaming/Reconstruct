@@ -19,7 +19,7 @@ package io.github.lxgaming.reconstruct;
 import io.github.lxgaming.reconstruct.bytecode.Attribute;
 import io.github.lxgaming.reconstruct.bytecode.Attributes;
 import io.github.lxgaming.reconstruct.bytecode.RcClass;
-import io.github.lxgaming.reconstruct.data.Transform;
+import io.github.lxgaming.reconstruct.entity.Transform;
 import io.github.lxgaming.reconstruct.manager.TransformerManager;
 import io.github.lxgaming.reconstruct.transformer.NameTransformer;
 import io.github.lxgaming.reconstruct.transformer.ProGuardTransformer;

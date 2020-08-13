@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.lxgaming.reconstruct.data;
+package io.github.lxgaming.reconstruct.entity;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;

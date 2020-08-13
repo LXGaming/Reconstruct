@@ -22,7 +22,7 @@ import io.github.lxgaming.reconstruct.bytecode.RcClass;
 import io.github.lxgaming.reconstruct.bytecode.RcConstructor;
 import io.github.lxgaming.reconstruct.bytecode.RcField;
 import io.github.lxgaming.reconstruct.bytecode.RcMethod;
-import io.github.lxgaming.reconstruct.data.Transform;
+import io.github.lxgaming.reconstruct.entity.Transform;
 import io.github.lxgaming.reconstruct.transformer.proguard.MappingProcessorImpl;
 import io.github.lxgaming.reconstruct.transformer.proguard.RemapperImpl;
 import org.objectweb.asm.ClassWriter;

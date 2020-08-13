@@ -16,7 +16,7 @@
 
 package io.github.lxgaming.reconstruct.transformer;
 
-import io.github.lxgaming.reconstruct.data.Transform;
+import io.github.lxgaming.reconstruct.entity.Transform;
 
 public interface Transformer {
     
