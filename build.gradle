@@ -10,7 +10,7 @@ targetCompatibility = 1.8
 
 group = "io.github.lxgaming"
 archivesBaseName = "Reconstruct"
-version = "1.0.0"
+version = "1.1.0"
 
 blossom {
     replaceToken("@version@", version)
