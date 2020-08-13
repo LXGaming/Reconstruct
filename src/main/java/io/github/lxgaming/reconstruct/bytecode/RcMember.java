@@ -16,8 +16,7 @@
 
 package io.github.lxgaming.reconstruct.bytecode;
 
-import io.github.lxgaming.reconstruct.util.Toolbox;
-
+import java.util.HashSet;
 import java.util.Set;
 
 public abstract class RcMember implements Attributes {
@@ -27,7 +26,7 @@ public abstract class RcMember implements Attributes {
     private String descriptor;
     
     RcMember() {
-        this.attributes = Toolbox.newHashSet();
+        this.attributes = new HashSet<>();
     }
     
     @Override

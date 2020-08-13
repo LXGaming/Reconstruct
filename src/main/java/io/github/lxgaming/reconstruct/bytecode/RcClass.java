@@ -18,6 +18,9 @@ package io.github.lxgaming.reconstruct.bytecode;
 
 import io.github.lxgaming.reconstruct.util.Toolbox;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -35,11 +38,11 @@ public final class RcClass implements Attributes {
     private int modifiers;
     
     public RcClass() {
-        this.attributes = Toolbox.newHashSet();
-        this.classes = Toolbox.newLinkedHashSet();
-        this.constructors = Toolbox.newLinkedHashSet();
-        this.fields = Toolbox.newLinkedHashSet();
-        this.methods = Toolbox.newLinkedHashSet();
+        this.attributes = new HashSet<>();
+        this.classes = new LinkedHashSet<>();
+        this.constructors = new LinkedHashSet<>();
+        this.fields = new LinkedHashSet<>();
+        this.methods = new LinkedHashSet<>();
     }
     
     public void update() {
@@ -65,7 +68,7 @@ public final class RcClass implements Attributes {
     }
     
     public List<RcClass> getClasses(Predicate<RcClass> predicate) {
-        List<RcClass> classes = Toolbox.newArrayList();
+        List<RcClass> classes = new ArrayList<>();
         for (RcClass rcClass : this.classes) {
             if (predicate.test(rcClass)) {
                 classes.add(rcClass);
@@ -94,7 +97,7 @@ public final class RcClass implements Attributes {
     }
     
     public List<RcConstructor> getConstructors(Predicate<RcConstructor> predicate) {
-        List<RcConstructor> constructors = Toolbox.newArrayList();
+        List<RcConstructor> constructors = new ArrayList<>();
         for (RcConstructor constructor : this.constructors) {
             if (predicate.test(constructor)) {
                 constructors.add(constructor);
@@ -123,7 +126,7 @@ public final class RcClass implements Attributes {
     }
     
     public List<RcField> getFields(Predicate<RcField> predicate) {
-        List<RcField> fields = Toolbox.newArrayList();
+        List<RcField> fields = new ArrayList<>();
         for (RcField field : this.fields) {
             if (predicate.test(field)) {
                 fields.add(field);
@@ -154,7 +157,7 @@ public final class RcClass implements Attributes {
     }
     
     public List<RcMethod> getMethods(Predicate<RcMethod> predicate) {
-        List<RcMethod> methods = Toolbox.newArrayList();
+        List<RcMethod> methods = new ArrayList<>();
         for (RcMethod method : this.methods) {
             if (predicate.test(method)) {
                 methods.add(method);

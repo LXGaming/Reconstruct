@@ -18,15 +18,10 @@ package io.github.lxgaming.reconstruct.util;
 
 import io.github.lxgaming.reconstruct.Reconstruct;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Toolbox {
     
@@ -159,20 +154,5 @@ public class Toolbox {
     
     public static String toJvmName(String name) {
         return name.replace('.', '/');
-    }
-    
-    @SafeVarargs
-    public static <E> ArrayList<E> newArrayList(E... elements) {
-        return Stream.of(elements).collect(Collectors.toCollection(ArrayList::new));
-    }
-    
-    @SafeVarargs
-    public static <E> HashSet<E> newHashSet(E... elements) {
-        return Stream.of(elements).collect(Collectors.toCollection(HashSet::new));
-    }
-    
-    @SafeVarargs
-    public static <E> LinkedHashSet<E> newLinkedHashSet(E... elements) {
-        return Stream.of(elements).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

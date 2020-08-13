@@ -38,7 +38,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -70,7 +72,7 @@ public class Reconstruct {
         instance = this;
         this.logger = LogManager.getLogger(Reconstruct.NAME);
         this.arguments = new Arguments();
-        this.classes = Toolbox.newHashSet();
+        this.classes = new HashSet<>();
     }
     
     public void load() {
@@ -308,7 +310,7 @@ public class Reconstruct {
     }
     
     public List<RcClass> getClasses(Predicate<RcClass> predicate) {
-        List<RcClass> classes = Toolbox.newArrayList();
+        List<RcClass> classes = new ArrayList<>();
         for (RcClass rcClass : this.classes) {
             if (predicate.test(rcClass)) {
                 classes.add(rcClass);

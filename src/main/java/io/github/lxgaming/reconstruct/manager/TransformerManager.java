@@ -19,15 +19,15 @@ package io.github.lxgaming.reconstruct.manager;
 import io.github.lxgaming.reconstruct.Reconstruct;
 import io.github.lxgaming.reconstruct.data.Transform;
 import io.github.lxgaming.reconstruct.transformer.Transformer;
-import io.github.lxgaming.reconstruct.util.Toolbox;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public final class TransformerManager {
     
-    private static final Set<Transformer> TRANSFORMERS = Toolbox.newLinkedHashSet();
+    private static final Set<Transformer> TRANSFORMERS = new LinkedHashSet<>();
     
     public static boolean process(Transform transform) {
         String className = transform.getClassName();

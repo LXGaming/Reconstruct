@@ -25,6 +25,8 @@ import io.github.lxgaming.reconstruct.bytecode.RcMethod;
 import io.github.lxgaming.reconstruct.util.Toolbox;
 import org.objectweb.asm.commons.Remapper;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -34,7 +36,7 @@ public class RemapperImpl extends Remapper {
     private final Set<RcClass> cachedClasses;
     
     public RemapperImpl() {
-        this.cachedClasses = Toolbox.newHashSet();
+        this.cachedClasses = new HashSet<>();
     }
     
     @Override
@@ -116,7 +118,7 @@ public class RemapperImpl extends Remapper {
     }
     
     private List<RcClass> getCachedClasses(Predicate<RcClass> predicate) {
-        List<RcClass> classes = Toolbox.newArrayList();
+        List<RcClass> classes = new ArrayList<>();
         for (RcClass rcClass : this.cachedClasses) {
             if (predicate.test(rcClass)) {
                 classes.add(rcClass);

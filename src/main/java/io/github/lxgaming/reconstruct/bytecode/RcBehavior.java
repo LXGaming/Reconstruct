@@ -16,8 +16,7 @@
 
 package io.github.lxgaming.reconstruct.bytecode;
 
-import io.github.lxgaming.reconstruct.util.Toolbox;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -26,11 +25,11 @@ public abstract class RcBehavior extends RcMember {
     private final List<RcClass> parameters;
     
     RcBehavior() {
-        this.parameters = Toolbox.newArrayList();
+        this.parameters = new ArrayList<>();
     }
     
     public List<RcClass> getParameters(Predicate<RcClass> predicate) {
-        List<RcClass> parameters = Toolbox.newArrayList();
+        List<RcClass> parameters = new ArrayList<>();
         for (RcClass parameter : this.parameters) {
             if (predicate.test(parameter)) {
                 parameters.add(parameter);
