@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Alex Thomson
+ * Copyright 2020 Alex Thomson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,23 @@ import java.util.Collection;
 
 public class StringUtils {
     
-    public static boolean isEmpty(CharSequence charSequence) {
-        return charSequence == null || charSequence.length() == 0;
+    /**
+     * Removes non-printable characters (excluding new line and carriage return) in the provided {@link java.lang.String String}.
+     *
+     * @param string The {@link java.lang.String String} to filter.
+     * @return The filtered {@link java.lang.String String}.
+     */
+    public static String filter(String string) {
+        return string.replaceAll("[^\\x20-\\x7E\\x0A\\x0D]", "");
     }
     
     public static boolean isBlank(CharSequence charSequence) {
-        int stringLength;
-        if (charSequence == null || (stringLength = charSequence.length()) == 0) {
+        int length;
+        if (charSequence == null || (length = charSequence.length()) == 0) {
             return true;
         }
         
-        for (int index = 0; index < stringLength; index++) {
+        for (int index = 0; index < length; index++) {
             if (!Character.isWhitespace(charSequence.charAt(index))) {
                 return false;
             }
@@ -43,14 +49,8 @@ public class StringUtils {
         return !isBlank(charSequence);
     }
     
-    /**
-     * Removes non-printable characters (excluding new line and carriage return) in the provided {@link java.lang.String String}.
-     *
-     * @param string The {@link java.lang.String String} to filter.
-     * @return The filtered {@link java.lang.String String}.
-     */
-    public static String filter(String string) {
-        return string.replaceAll("[^\\x20-\\x7E\\x0A\\x0D]", "");
+    public static boolean isEmpty(CharSequence charSequence) {
+        return charSequence == null || charSequence.length() == 0;
     }
     
     public static boolean startsWith(Collection<String> collection, String targetString) {

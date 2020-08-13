@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Alex Thomson
+ * Copyright 2020 Alex Thomson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.lxgaming.reconstruct.util;
+package io.github.lxgaming.reconstruct.util.jcommander;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class Arguments {
     
-    @Parameter(names = {"-debug"}, description = "Debugging")
+    @Parameter(names = {"-debug"}, description = "For debugging purposes")
     private boolean debug = false;
     
     @Parameter(names = {"-agree"}, description = "Do not distribute confidential or proprietary information unless you have explicit permission from the copyright holder")
