@@ -71,11 +71,6 @@ public class Reconstruct {
     }
     
     public void load() {
-        getLogger().info("{} v{}", Reconstruct.NAME, Reconstruct.VERSION);
-        getLogger().info("Authors: {}", Reconstruct.AUTHORS);
-        getLogger().info("Source: {}", Reconstruct.SOURCE);
-        getLogger().info("Website: {}", Reconstruct.WEBSITE);
-        
         if (getConfig().getJarPath() == null || getConfig().getMappingPath() == null || getConfig().getOutputPath() == null) {
             getLogger().error("Invalid arguments");
             return;

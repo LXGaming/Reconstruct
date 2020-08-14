@@ -30,6 +30,11 @@ public class Main {
         Reconstruct reconstruct = new Reconstruct(new ConfigImpl());
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
         
+        Reconstruct.getInstance().getLogger().info("{} v{}", Reconstruct.NAME, Reconstruct.VERSION);
+        Reconstruct.getInstance().getLogger().info("Authors: {}", Reconstruct.AUTHORS);
+        Reconstruct.getInstance().getLogger().info("Source: {}", Reconstruct.SOURCE);
+        Reconstruct.getInstance().getLogger().info("Website: {}", Reconstruct.WEBSITE);
+        
         try {
             JCommander.newBuilder()
                     .addObject(Reconstruct.getInstance().getConfig())
