@@ -1,0 +1,9 @@
+include "cli"
+include "common"
+
+[
+    "cli",
+    "common"
+].each {
+    findProject(":$it")?.name = "reconstruct-$it"
+}

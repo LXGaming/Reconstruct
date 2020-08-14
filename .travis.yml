@@ -22,5 +22,8 @@ install: skip
 script:
   - ./gradlew clean build --console=plain --refresh-dependencies
 
+after_success:
+  - ./gradlew bintrayUpload
+
 notifications:
   email: false

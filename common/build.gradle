@@ -1,0 +1,114 @@
+plugins {
+    id "com.github.johnrengelman.shadow"
+    id "com.jfrog.bintray"
+    id "java"
+    id "java-library"
+    id "maven-publish"
+    id "net.kyori.blossom"
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group = "io.github.lxgaming"
+archivesBaseName = "reconstruct-common"
+version = version
+
+blossom {
+    replaceToken("@version@", version)
+}
+
+configurations {
+    jar.enabled = false
+    jar.dependsOn("shadowJar")
+}
+
+repositories {
+}
+
+dependencies {
+    shadow("net.sf.proguard:proguard-base:6.2.2")
+    api("org.slf4j:slf4j-api:1.7.30")
+    testCompile("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+    api("org.ow2.asm:asm-commons:8.0.1")
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set("javadoc")
+    from javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set("sources")
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+    publications = ["mavenPublication"]
+    pkg {
+        repo = "maven"
+        name = "Reconstruct"
+        licenses = ["Apache-2.0"]
+        vcsUrl = "https://github.com/LXGaming/Reconstruct.git"
+        publish = true
+        version {
+            name = project.version
+            released = new Date()
+        }
+    }
+}
+
+bintrayUpload {
+    onlyIf { System.getenv("BINTRAY_KEY") != null }
+    onlyIf { System.getenv("BINTRAY_USER") != null }
+    onlyIf { System.getenv("TRAVIS_BUILD_NUMBER") != null }
+    onlyIf { System.getenv("TRAVIS_JOB_NUMBER") ==~ /\d+\.1$/ }
+    onlyIf { System.getenv("TRAVIS_PULL_REQUEST") == "false" }
+}
+
+javadoc {
+    failOnError = false
+}
+
+processResources {
+    from("../LICENSE")
+    rename("LICENSE", "LICENSE-Reconstruct")
+}
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            from components.java
+            groupId group
+            artifactId archivesBaseName
+            version version
+            artifact javadocJar
+            artifact sourcesJar
+        }
+    }
+}
+
+shadowJar {
+    archiveClassifier.set(null)
+    configurations = [project.configurations.shadow]
+
+    exclude {
+        // Exclude all ProGuard class files except the MappingProcessor & MappingReader
+        if (it.name.endsWith(".class") && it.path.startsWith("proguard/")) {
+            return !(it.path == "proguard/obfuscate/MappingProcessor.class" || it.path == "proguard/obfuscate/MappingReader.class")
+        }
+
+        return false
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
