@@ -26,12 +26,12 @@ public final class RcMethod extends RcBehavior {
     
     public void update() {
         setDescriptor(Toolbox.getMethodDescriptor(getName(), getParameters().stream().map(RcClass::getDescriptor).toArray(String[]::new), returnType.getDescriptor()));
-        getAttribute(OBFUSCATED_NAME).map(obfuscatedName -> {
+        getAttribute(Attributes.OBFUSCATED_NAME).map(obfuscatedName -> {
             return Toolbox.getMethodDescriptor(obfuscatedName, getParameters().stream().map(parameter -> {
-                return parameter.getAttribute(OBFUSCATED_DESCRIPTOR).orElse(parameter.getDescriptor());
-            }).toArray(String[]::new), returnType.getAttribute(OBFUSCATED_DESCRIPTOR).orElse(returnType.getDescriptor()));
+                return parameter.getAttribute(Attributes.OBFUSCATED_DESCRIPTOR).orElse(parameter.getDescriptor());
+            }).toArray(String[]::new), returnType.getAttribute(Attributes.OBFUSCATED_DESCRIPTOR).orElse(returnType.getDescriptor()));
         }).ifPresent(descriptor -> {
-            setAttribute(OBFUSCATED_DESCRIPTOR, descriptor);
+            setAttribute(Attributes.OBFUSCATED_DESCRIPTOR, descriptor);
         });
     }
     

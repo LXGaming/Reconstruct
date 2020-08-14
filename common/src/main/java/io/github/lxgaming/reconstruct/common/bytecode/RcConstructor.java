@@ -27,12 +27,12 @@ public final class RcConstructor extends RcBehavior {
     
     public void update() {
         setDescriptor(Toolbox.getConstructorDescriptor(getName(), getParameters().stream().map(RcClass::getDescriptor).toArray(String[]::new)));
-        getAttribute(OBFUSCATED_NAME).map(obfuscatedName -> {
+        getAttribute(Attributes.OBFUSCATED_NAME).map(obfuscatedName -> {
             return Toolbox.getConstructorDescriptor(obfuscatedName, getParameters().stream().map(parameter -> {
-                return parameter.getAttribute(OBFUSCATED_DESCRIPTOR).orElse(parameter.getDescriptor());
+                return parameter.getAttribute(Attributes.OBFUSCATED_DESCRIPTOR).orElse(parameter.getDescriptor());
             }).toArray(String[]::new));
         }).ifPresent(descriptor -> {
-            setAttribute(OBFUSCATED_DESCRIPTOR, descriptor);
+            setAttribute(Attributes.OBFUSCATED_DESCRIPTOR, descriptor);
         });
     }
     
