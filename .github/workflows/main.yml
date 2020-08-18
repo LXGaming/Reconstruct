@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash {0}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Gradle Wrapper Validation
+      uses: gradle/wrapper-validation-action@v1
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Cache Gradle
+      uses: actions/cache@v2
+      with:
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    - name: Setup Gradle
+      run: chmod +x gradlew
+    - name: Build
+      env:
+        BUILD_NUMBER: ${{ github.run_number }}
+      run: ./gradlew build --console=plain --refresh-dependencies
+    - name: Publish
+      if: ${{ github.event_name == 'push' }}
+      env:
+        BUILD_NUMBER: ${{ github.run_number }}
+        BINTRAY_USER: lxgaming
+        BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
+      run: ./gradlew bintrayUpload --console=plain; exit 0

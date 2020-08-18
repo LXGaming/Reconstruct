@@ -68,9 +68,6 @@ bintray {
 bintrayUpload {
     onlyIf { System.getenv("BINTRAY_KEY") != null }
     onlyIf { System.getenv("BINTRAY_USER") != null }
-    onlyIf { System.getenv("TRAVIS_BUILD_NUMBER") != null }
-    onlyIf { System.getenv("TRAVIS_JOB_NUMBER") ==~ /\d+\.1$/ }
-    onlyIf { System.getenv("TRAVIS_PULL_REQUEST") == "false" }
 }
 
 javadoc {
