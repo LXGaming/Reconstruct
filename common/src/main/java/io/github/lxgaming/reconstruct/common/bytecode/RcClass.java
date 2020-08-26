@@ -53,14 +53,7 @@ public final class RcClass implements Attributes {
     }
     
     public RcClass getSuperClass() {
-        if (Modifier.isAnnotation(getModifiers()) || Modifier.isEnum(getModifiers()) || Modifier.isInterface(getModifiers())) {
-            return null;
-        }
-        
-        return Toolbox.getFirst(getClasses(rcClass -> !Modifier.isAnnotation(rcClass.getModifiers())
-                && !Modifier.isEnum(rcClass.getModifiers())
-                && !Modifier.isInterface(rcClass.getModifiers())
-        ));
+        return Toolbox.getFirst(getClasses(rcClass -> true));
     }
     
     public List<RcClass> getInterfaces() {
