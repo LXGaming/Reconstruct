@@ -12,6 +12,10 @@ archivesBaseName = "reconstruct-cli"
 version = version
 
 configurations {
+    shadow {
+        runtime.extendsFrom(shadow)
+    }
+
     build.dependsOn("signJar")
     compileJava.dependsOn(":reconstruct-common:build")
     jar.enabled = false
