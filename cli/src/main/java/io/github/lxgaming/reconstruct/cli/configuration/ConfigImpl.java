@@ -25,22 +25,22 @@ import java.util.List;
 
 public class ConfigImpl implements Config {
     
-    @Parameter(names = {"-debug"}, description = "For debugging purposes")
+    @Parameter(names = {"-debug", "--debug"}, description = "For debugging purposes")
     private boolean debug = false;
     
-    @Parameter(names = {"-transformers"}, description = "Transformers to use during the deobfuscation process")
+    @Parameter(names = {"-transformer", "--transformer", "-transformers", "--transformers"}, description = "Transformers to use during the deobfuscation process")
     private List<String> transformers = null;
     
-    @Parameter(names = {"-jar"}, description = "Obfuscated Jar Path", required = true, converter = PathConverter.class)
+    @Parameter(names = {"-jar", "--jar", "-input", "--input"}, description = "Obfuscated Jar Path", required = true, converter = PathConverter.class)
     private Path jarPath = null;
     
-    @Parameter(names = {"-mapping"}, description = "ProGuard Mappings Path", required = true, converter = PathConverter.class)
+    @Parameter(names = {"-mapping", "--mapping"}, description = "ProGuard Mappings Path", required = true, converter = PathConverter.class)
     private Path mappingPath = null;
     
-    @Parameter(names = {"-output"}, description = "Output Jar Path", required = true, converter = PathConverter.class)
+    @Parameter(names = {"-output", "--output"}, description = "Output Jar Path", required = true, converter = PathConverter.class)
     private Path outputPath = null;
     
-    @Parameter(names = {"-exclude"}, description = "Packages which won't be transformed")
+    @Parameter(names = {"-exclude", "--exclude", "-excludes", "--excludes", "-excluded", "--excluded"}, description = "Packages which won't be transformed")
     private List<String> excludedPackages = null;
     
     @Parameter(names = {"-agree"}, description = "Do not distribute confidential or proprietary information unless you have explicit permission from the copyright holder")
