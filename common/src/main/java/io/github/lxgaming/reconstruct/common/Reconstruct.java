@@ -16,21 +16,22 @@
 
 package io.github.lxgaming.reconstruct.common;
 
+import io.github.lxgaming.common.task.Task;
 import io.github.lxgaming.reconstruct.common.bytecode.Attribute;
 import io.github.lxgaming.reconstruct.common.bytecode.Attributes;
 import io.github.lxgaming.reconstruct.common.bytecode.RcClass;
 import io.github.lxgaming.reconstruct.common.configuration.Config;
-import io.github.lxgaming.reconstruct.common.entity.Transform;
+import io.github.lxgaming.reconstruct.common.manager.TaskManager;
 import io.github.lxgaming.reconstruct.common.manager.TransformerManager;
+import io.github.lxgaming.reconstruct.common.task.TransformTask;
+import io.github.lxgaming.reconstruct.common.task.WriteTask;
 import io.github.lxgaming.reconstruct.common.util.StringUtils;
 import io.github.lxgaming.reconstruct.common.util.Toolbox;
 import org.objectweb.asm.ClassReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -40,14 +41,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
-import java.util.zip.CRC32;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class Reconstruct {
     
@@ -62,12 +61,16 @@ public class Reconstruct {
     private final Logger logger;
     private final Config config;
     private final Set<RcClass> classes;
+    private final AtomicBoolean state;
+    private final List<Task> tasks;
     
     public Reconstruct(Config config) {
         instance = this;
         this.logger = LoggerFactory.getLogger(Reconstruct.NAME);
         this.config = config;
         this.classes = new HashSet<>();
+        this.state = new AtomicBoolean(false);
+        this.tasks = new CopyOnWriteArrayList<>();
     }
     
     public void load() {
@@ -76,6 +79,14 @@ public class Reconstruct {
             return;
         }
         
+        if (getConfig().getThreads() <= 0) {
+            getLogger().warn("Threads is out of bounds. Resetting to {}", Runtime.getRuntime().availableProcessors());
+            getConfig().setThreads(Runtime.getRuntime().availableProcessors());
+        }
+        
+        getState().set(true);
+        
+        TaskManager.prepare();
         TransformerManager.prepare();
         
         if (!link(getConfig().getJarPath())) {
@@ -138,65 +149,78 @@ public class Reconstruct {
     }
     
     private void transform(Path inputPath, Path outputPath) {
+        WriteTask writeTask = new WriteTask(outputPath);
+        TaskManager.schedule(writeTask);
+        
         try (JarFile jarFile = new JarFile(inputPath.toFile(), false)) {
-            try (JarOutputStream outputStream = new JarOutputStream(new FileOutputStream(outputPath.toFile()))) {
-                outputStream.setMethod(ZipOutputStream.STORED);
-                for (Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); ) {
-                    JarEntry jarEntry = enumeration.nextElement();
-                    if (jarEntry.isDirectory()) {
+            for (Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); ) {
+                // Shutting down
+                if (!getState().get()) {
+                    break;
+                }
+                
+                JarEntry jarEntry = enumeration.nextElement();
+                if (jarEntry.isDirectory()) {
+                    continue;
+                }
+                
+                if (jarEntry.getName().startsWith("META-INF/")) {
+                    // Exclude code signing certificates
+                    if (jarEntry.getName().endsWith(".DSA") || jarEntry.getName().endsWith(".RSA") || jarEntry.getName().endsWith(".SF")) {
                         continue;
                     }
                     
-                    if (jarEntry.getName().startsWith("META-INF/")) {
-                        // Exclude code signing certificates
-                        if (jarEntry.getName().endsWith(".DSA") || jarEntry.getName().endsWith(".RSA") || jarEntry.getName().endsWith(".SF")) {
+                    // Modify the Manifest
+                    if (jarEntry.getName().endsWith("MANIFEST.MF")) {
+                        try (InputStream inputStream = jarFile.getInputStream(jarEntry)) {
+                            Manifest manifest = new Manifest(inputStream);
+                            manifest.getMainAttributes().putValue(Reconstruct.NAME, Reconstruct.VERSION);
+                            // Exclude code signing digests
+                            manifest.getEntries().clear();
+                            writeTask.queue(jarEntry, getByteArray(manifest));
                             continue;
-                        }
-                        
-                        if (jarEntry.getName().endsWith("MANIFEST.MF")) {
-                            try (InputStream inputStream = jarFile.getInputStream(jarEntry)) {
-                                Manifest manifest = new Manifest(inputStream);
-                                manifest.getMainAttributes().putValue(Reconstruct.NAME, Reconstruct.VERSION);
-                                // Exclude code signing digests
-                                manifest.getEntries().clear();
-                                writeZipEntry(getByteArray(manifest), outputStream, jarEntry.getName());
-                                continue;
-                            }
                         }
                     }
+                }
+                
+                try (InputStream inputStream = jarFile.getInputStream(jarEntry)) {
+                    if (!jarEntry.getName().endsWith(".class")) {
+                        writeTask.queue(jarEntry, inputStream);
+                        continue;
+                    }
                     
-                    try (InputStream inputStream = jarFile.getInputStream(jarEntry)) {
-                        if (!jarEntry.getName().endsWith(".class")) {
-                            writeZipEntry(inputStream, outputStream, jarEntry);
-                            continue;
-                        }
-                        
-                        String name = Toolbox.fromFileName(jarEntry.getName());
-                        if (StringUtils.startsWith(getConfig().getExcludedPackages(), name)) {
-                            getLogger().debug("Skipping {}", name);
-                            writeZipEntry(inputStream, outputStream, jarEntry);
-                            continue;
-                        }
-                        
-                        ClassReader classReader = new ClassReader(inputStream);
-                        
-                        Transform transform = new Transform();
-                        transform.setClassReader(classReader);
-                        transform.setClassName(name);
-                        
-                        if (!TransformerManager.execute(transform)) {
-                            writeZipEntry(inputStream, outputStream, jarEntry);
-                            continue;
-                        }
-                        
-                        getLogger().info("Transformed {} -> {}", name, transform.getClassName());
-                        writeZipEntry(transform.getClassWriter().toByteArray(), outputStream, Toolbox.toFileName(transform.getClassName()));
+                    String name = Toolbox.fromFileName(jarEntry.getName());
+                    if (StringUtils.startsWith(getConfig().getExcludedPackages(), name)) {
+                        getLogger().debug("Skipping {}", name);
+                        writeTask.queue(jarEntry, inputStream);
+                        continue;
+                    }
+                    
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    Toolbox.transferBytes(inputStream, outputStream);
+                    byte[] bytes = outputStream.toByteArray();
+                    
+                    TransformTask transformTask = new TransformTask(writeTask, name, bytes, tasks::remove);
+                    if (getConfig().getThreads() != 1) {
+                        tasks.add(transformTask);
+                        TaskManager.schedule(transformTask);
+                    } else {
+                        transformTask.execute();
                     }
                 }
             }
         } catch (Exception ex) {
             Reconstruct.getInstance().getLogger().error("Encountered an error while transforming", ex);
         }
+        
+        Reconstruct.getInstance().getLogger().info("Waiting for TransformTasks to complete...");
+        for (Task task : tasks) {
+            task.await();
+        }
+        
+        Reconstruct.getInstance().getLogger().info("Waiting for WriteTask to complete...");
+        writeTask.getState().set(false);
+        writeTask.await();
     }
     
     private byte[] getByteArray(Manifest manifest) throws Exception {
@@ -204,34 +228,6 @@ public class Reconstruct {
             manifest.write(outputStream);
             return outputStream.toByteArray();
         }
-    }
-    
-    private void writeZipEntry(byte[] bytes, ZipOutputStream outputStream, String name) throws Exception {
-        CRC32 crc = new CRC32();
-        crc.update(bytes);
-        
-        ZipEntry zipEntry = new ZipEntry(name);
-        zipEntry.setSize(bytes.length);
-        zipEntry.setCompressedSize(bytes.length);
-        zipEntry.setCrc(crc.getValue());
-        
-        crc.reset();
-        
-        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes)) {
-            writeZipEntry(inputStream, outputStream, zipEntry);
-        }
-    }
-    
-    private void writeZipEntry(InputStream inputStream, ZipOutputStream outputStream, ZipEntry zipEntry) throws Exception {
-        outputStream.putNextEntry(zipEntry);
-        
-        byte[] buffer = new byte[8192];
-        int read;
-        while ((read = inputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, read);
-        }
-        
-        outputStream.closeEntry();
     }
     
     public static Reconstruct getInstance() {
@@ -281,5 +277,9 @@ public class Reconstruct {
     
     public Set<RcClass> getClasses() {
         return classes;
+    }
+    
+    public AtomicBoolean getState() {
+        return state;
     }
 }

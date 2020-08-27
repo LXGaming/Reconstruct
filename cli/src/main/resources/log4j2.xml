@@ -4,7 +4,7 @@
         <Console name="Console">
             <PatternLayout pattern="%color{[%d{HH:mm:ss}] [%level] [%t]: %msg%n%xEx}"/>
         </Console>
-        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz" immediateFlush="false">>
             <PatternLayout pattern="[%d{HH:mm:ss}] [%level] [%t]: %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>

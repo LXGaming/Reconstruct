@@ -28,6 +28,9 @@ public class ConfigImpl implements Config {
     @Parameter(names = {"-debug", "--debug"}, description = "For debugging purposes")
     private boolean debug = false;
     
+    @Parameter(names = {"-thread", "--thread", "-threads", "--threads"}, description = "Performs deobfuscation asynchronously across the specified number of threads")
+    private int threads = 1;
+    
     @Parameter(names = {"-transformer", "--transformer", "-transformers", "--transformers"}, description = "Transformers to use during the deobfuscation process")
     private List<String> transformers = null;
     
@@ -49,6 +52,16 @@ public class ConfigImpl implements Config {
     @Override
     public boolean isDebug() {
         return debug;
+    }
+    
+    @Override
+    public int getThreads() {
+        return threads;
+    }
+    
+    @Override
+    public void setThreads(int threads) {
+        this.threads = threads;
     }
     
     @Override

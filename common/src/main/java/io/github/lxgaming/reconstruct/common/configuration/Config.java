@@ -23,6 +23,10 @@ public interface Config {
     
     boolean isDebug();
     
+    int getThreads();
+    
+    void setThreads(int threads);
+    
     Collection<String> getTransformers();
     
     Path getJarPath();
