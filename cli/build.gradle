@@ -30,6 +30,7 @@ dependencies {
         exclude(module: "proguard-base")
     }
     shadow("com.beust:jcommander:1.78")
+    runtime("net.sf.proguard:proguard-base:6.2.2")
     annotationProcessor("org.apache.logging.log4j:log4j-core:2.13.3")
     shadow("org.apache.logging.log4j:log4j-core:2.13.3")
     shadow("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
