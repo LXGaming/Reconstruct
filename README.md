@@ -11,7 +11,7 @@ java -jar <Reconstruct File Name> -jar <Obfuscated jar> -mapping <ProGuard mappi
 java -jar reconstruct-cli.jar -jar client.jar -mapping client.txt -output client-deobf.jar
 
 // Example - Server
-java -jar reconstruct-cli.jar -jar server.jar -mapping server.txt -output server-deobf.jar -exclude "com.google.,io.netty.,it.unimi.dsi.fastutil.,javax.,joptsimple.,org.apache."
+java -jar reconstruct-cli.jar -jar server.jar -mapping server.txt -output server-deobf.jar -exclude "com.google.,com.mojang.,io.netty.,it.unimi.dsi.fastutil.,javax.,joptsimple.,org.apache."
 ```
 
 ## Library
