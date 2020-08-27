@@ -29,7 +29,7 @@ public class ConfigImpl implements Config {
     private boolean debug = false;
     
     @Parameter(names = {"-thread", "--thread", "-threads", "--threads"}, description = "Performs deobfuscation asynchronously across the specified number of threads")
-    private int threads = 1;
+    private int threads = 0;
     
     @Parameter(names = {"-transformer", "--transformer", "-transformers", "--transformers"}, description = "Transformers to use during the deobfuscation process")
     private List<String> transformers = null;
