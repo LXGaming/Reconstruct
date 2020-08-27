@@ -54,7 +54,7 @@ public class Main {
             Reconstruct.getInstance().getLogger().info("Debug mode disabled");
         }
         
-        if (!Reconstruct.getInstance().getConfig().isAgree()) {
+        if (!((ConfigImpl) Reconstruct.getInstance().getConfig()).isAgree()) {
             if (System.console() == null && !System.getProperty("java.class.path").contains("idea_rt.jar")) {
                 Reconstruct.getInstance().getLogger().error("Failed to detect Console");
                 return;

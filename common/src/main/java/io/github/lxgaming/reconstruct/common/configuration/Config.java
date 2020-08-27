@@ -23,8 +23,6 @@ public interface Config {
     
     boolean isDebug();
     
-    boolean isAgree();
-    
     Collection<String> getTransformers();
     
     Path getJarPath();

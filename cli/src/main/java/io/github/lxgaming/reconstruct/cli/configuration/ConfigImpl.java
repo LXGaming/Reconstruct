@@ -28,9 +28,6 @@ public class ConfigImpl implements Config {
     @Parameter(names = {"-debug"}, description = "For debugging purposes")
     private boolean debug = false;
     
-    @Parameter(names = {"-agree"}, description = "Do not distribute confidential or proprietary information unless you have explicit permission from the copyright holder")
-    private boolean agree = false;
-    
     @Parameter(names = {"-transformers"}, description = "Transformers to use during the deobfuscation process")
     private List<String> transformers = null;
     
@@ -46,14 +43,12 @@ public class ConfigImpl implements Config {
     @Parameter(names = {"-exclude"}, description = "Packages which won't be transformed")
     private List<String> excludedPackages = null;
     
+    @Parameter(names = {"-agree"}, description = "Do not distribute confidential or proprietary information unless you have explicit permission from the copyright holder")
+    private boolean agree = false;
+    
     @Override
     public boolean isDebug() {
         return debug;
-    }
-    
-    @Override
-    public boolean isAgree() {
-        return agree;
     }
     
     @Override
@@ -79,5 +74,9 @@ public class ConfigImpl implements Config {
     @Override
     public List<String> getExcludedPackages() {
         return excludedPackages;
+    }
+    
+    public boolean isAgree() {
+        return agree;
     }
 }
