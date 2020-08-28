@@ -19,6 +19,7 @@ package io.github.lxgaming.reconstruct.common;
 import io.github.lxgaming.common.task.Task;
 import io.github.lxgaming.reconstruct.common.bytecode.Attribute;
 import io.github.lxgaming.reconstruct.common.bytecode.Attributes;
+import io.github.lxgaming.reconstruct.common.bytecode.RcArray;
 import io.github.lxgaming.reconstruct.common.bytecode.RcClass;
 import io.github.lxgaming.reconstruct.common.configuration.Config;
 import io.github.lxgaming.reconstruct.common.manager.TaskManager;
@@ -244,11 +245,19 @@ public class Reconstruct {
     
     public RcClass getOrCreateClass(String name) {
         return getClass(name).orElseGet(() -> {
-            RcClass rcClass = new RcClass();
-            rcClass.setName(name);
-            rcClass.update();
-            classes.add(rcClass);
-            return rcClass;
+            RcClass object;
+            if (name.endsWith("[]")) {
+                RcClass type = getOrCreateClass(name.substring(0, name.length() - 2));
+                object = new RcArray();
+                ((RcArray) object).setType(type);
+            } else {
+                object = new RcClass();
+            }
+            
+            object.setName(name);
+            object.update();
+            classes.add(object);
+            return object;
         });
     }
     

@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public final class RcClass implements Attributes {
+public class RcClass implements Attributes {
     
     private final Set<Attribute> attributes;
     private final Set<RcClass> classes;

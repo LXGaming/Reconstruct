@@ -71,14 +71,12 @@ public class Toolbox {
     }
     
     public static String getClassDescriptor(String string) {
-        StringBuilder stringBuilder = new StringBuilder();
         if (string.endsWith("[]")) {
-            stringBuilder.append("[");
-            appendClassDescriptor(stringBuilder, string.substring(0, string.length() - 2));
-        } else {
-            appendClassDescriptor(stringBuilder, string);
+            return "[" + getClassDescriptor(string.substring(0, string.length() - 2));
         }
         
+        StringBuilder stringBuilder = new StringBuilder();
+        appendClassDescriptor(stringBuilder, string);
         return stringBuilder.toString();
     }
     
