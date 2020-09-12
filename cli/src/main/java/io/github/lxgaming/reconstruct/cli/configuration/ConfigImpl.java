@@ -46,7 +46,7 @@ public class ConfigImpl implements Config {
     @Parameter(names = {"-exclude", "--exclude", "-excludes", "--excludes", "-excluded", "--excluded"}, description = "Packages which won't be transformed")
     private List<String> excludedPackages = null;
     
-    @Parameter(names = {"-agree"}, description = "Do not distribute confidential or proprietary information unless you have explicit permission from the copyright holder")
+    @Parameter(names = {"-agree", "--agree"}, description = "Do not distribute confidential or proprietary information unless you have explicit permission from the copyright holder")
     private boolean agree = false;
     
     @Override
