@@ -97,6 +97,12 @@ public class Reconstruct {
         transform(getConfig().getJarPath(), getConfig().getOutputPath());
     }
     
+    public void shutdown() {
+        getState().set(false);
+        TaskManager.shutdown();
+        instance = null;
+    }
+    
     private boolean link(Path inputPath) {
         try (JarFile jarFile = new JarFile(inputPath.toString(), false)) {
             for (Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); ) {

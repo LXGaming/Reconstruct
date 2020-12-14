@@ -17,7 +17,6 @@
 package io.github.lxgaming.reconstruct.cli.util;
 
 import io.github.lxgaming.reconstruct.common.Reconstruct;
-import io.github.lxgaming.reconstruct.common.manager.TaskManager;
 import org.apache.logging.log4j.LogManager;
 
 public class ShutdownHook extends Thread {
@@ -26,10 +25,7 @@ public class ShutdownHook extends Thread {
     public void run() {
         Thread.currentThread().setName("Shutdown Thread");
         Reconstruct.getInstance().getLogger().info("Shutting down...");
-        
-        Reconstruct.getInstance().getState().set(false);
-        
-        TaskManager.shutdown();
+        Reconstruct.getInstance().shutdown();
         LogManager.shutdown();
     }
 }
