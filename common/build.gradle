@@ -34,7 +34,7 @@ dependencies {
     api("io.github.lxgaming:common:1.1.1")
     shadow("net.sf.proguard:proguard-base:6.2.2")
     api("org.slf4j:slf4j-api:1.7.30")
-    testCompile("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+    testCompile("org.junit.jupiter:junit-jupiter-engine:5.7.0")
     api("org.ow2.asm:asm-commons:8.0.1")
 }
 
