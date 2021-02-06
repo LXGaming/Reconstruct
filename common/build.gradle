@@ -73,7 +73,7 @@ publishing {
             artifact sourcesJar
             pom {
                 name = "Reconstruct"
-                description = "ProGuard Deobfuscator "
+                description = "ProGuard Deobfuscator"
                 url = "https://github.com/LXGaming/Reconstruct"
                 developers {
                     developer {
