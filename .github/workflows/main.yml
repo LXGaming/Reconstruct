@@ -37,10 +37,3 @@ jobs:
       env:
         BUILD_NUMBER: ${{ github.run_number }}
       run: ./gradlew build --console=plain --refresh-dependencies
-    - name: Publish
-      if: ${{ github.event_name == 'push' }}
-      env:
-        BUILD_NUMBER: ${{ github.run_number }}
-        BINTRAY_USER: lxgaming
-        BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
-      run: ./gradlew bintrayUpload --console=plain; exit 0
