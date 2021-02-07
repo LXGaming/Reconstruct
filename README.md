@@ -15,9 +15,9 @@ java -jar reconstruct-cli.jar -jar server.jar -mapping server.txt -output server
 ```
 
 ## Library
-Repository: `https://dl.bintray.com/lxgaming/maven`
+Repository: `mavenCentral()`
 <br>
-Dependency: `io.github.lxgaming:reconstruct-common:1.2.0`
+Dependency: `io.github.lxgaming:reconstruct-common:1.3.3`
 
 ## License
 Reconstruct is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
