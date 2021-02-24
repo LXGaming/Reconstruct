@@ -34,7 +34,7 @@ dependencies {
     annotationProcessor("org.apache.logging.log4j:log4j-core:2.14.0")
     shadow("org.apache.logging.log4j:log4j-core:2.14.0")
     shadow("org.apache.logging.log4j:log4j-slf4j-impl:2.14.0")
-    shadow("org.fusesource.jansi:jansi:2.1.0")
+    shadow("org.fusesource.jansi:jansi:1.18")
 }
 
 jar {
