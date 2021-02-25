@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" shutdownHook="disable" packages="io.github.lxgaming.reconstruct.cli.util.log4j">
+<Configuration status="WARN" shutdownHook="disable">
     <Appenders>
         <Console name="Console">
-            <PatternLayout pattern="%color{[%d{HH:mm:ss}] [%level] [%t]: %msg%n%xEx}"/>
+            <PatternLayout pattern="%highlight{[%d{HH:mm:ss}] [%level] [%t]: %msg%n%xEx}{WARN=BRIGHT YELLOW,INFO=RESET,DEBUG=BRIGHT CYAN,TRACE=BRIGHT MAGENTA}"/>
         </Console>
         <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz" immediateFlush="false">>
             <PatternLayout pattern="[%d{HH:mm:ss}] [%level] [%t]: %msg%n"/>

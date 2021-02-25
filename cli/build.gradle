@@ -31,10 +31,9 @@ dependencies {
     }
     shadow("com.beust:jcommander:1.78")
     runtime("net.sf.proguard:proguard-base:6.2.2")
-    annotationProcessor("org.apache.logging.log4j:log4j-core:2.14.0")
     shadow("org.apache.logging.log4j:log4j-core:2.14.0")
     shadow("org.apache.logging.log4j:log4j-slf4j-impl:2.14.0")
-    shadow("org.fusesource.jansi:jansi:1.18")
+    shadow("org.fusesource.jansi:jansi:2.3.1")
 }
 
 jar {
@@ -46,15 +45,6 @@ jar {
 shadowJar {
     archiveClassifier.set(null)
     configurations = [project.configurations.shadow]
-
-    exclude {
-        // Exclude the Log4j2Plugins.dat file so logging works. Log4j2PluginsCacheFileTransformer doesn't work.
-        if (it.path == "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat") {
-            return true
-        }
-
-        return false
-    }
 }
 
 task signJar {
