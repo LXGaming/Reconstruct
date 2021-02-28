@@ -110,9 +110,11 @@ public class RcClass implements Attributes {
             return field;
         }
         
-        RcClass parentClass = getSuperClass();
-        if (parentClass != null) {
-            return parentClass.getField(predicate);
+        for (RcClass rcClass : getClasses()) {
+            RcField parentField = rcClass.getField(predicate);
+            if (parentField != null) {
+                return parentField;
+            }
         }
         
         return null;
