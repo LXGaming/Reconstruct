@@ -29,7 +29,7 @@ public class ClassVisitorImpl extends ClassVisitor {
     
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-        MethodVisitor methodVisitor = cv.visitMethod(access, name, descriptor, signature, exceptions);
+        MethodVisitor methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions);
         if (methodVisitor == null) {
             return null;
         }

@@ -18,7 +18,6 @@ package io.github.lxgaming.reconstruct.common.transformer.rename;
 
 import io.github.lxgaming.reconstruct.common.entity.Transform;
 import io.github.lxgaming.reconstruct.common.transformer.Transformer;
-import org.objectweb.asm.ClassWriter;
 
 public class RenameTransformer extends Transformer {
     
@@ -35,9 +34,7 @@ public class RenameTransformer extends Transformer {
     
     @Override
     public void execute(Transform transform) throws Exception {
-        transform.setClassWriter(new ClassWriter(0));
-        ClassVisitorImpl classVisitor = new ClassVisitorImpl(transform.getClassWriter());
-        transform.getClassReader().accept(classVisitor, 0);
-        transform.getClassWriter().visitEnd();
+        ClassVisitorImpl classVisitor = new ClassVisitorImpl(transform.getClassVisitor());
+        transform.setClassVisitor(classVisitor);
     }
 }

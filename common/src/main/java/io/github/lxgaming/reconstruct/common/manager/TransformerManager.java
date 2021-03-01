@@ -23,8 +23,6 @@ import io.github.lxgaming.reconstruct.common.transformer.proguard.ProGuardTransf
 import io.github.lxgaming.reconstruct.common.transformer.rename.RenameTransformer;
 import io.github.lxgaming.reconstruct.common.util.StringUtils;
 import io.github.lxgaming.reconstruct.common.util.Toolbox;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -45,23 +43,11 @@ public final class TransformerManager {
         String className = transform.getClassName();
         for (Transformer transformer : TRANSFORMERS) {
             try {
-                if (transform.getClassReader() != null && transform.getClassWriter() != null) {
-                    ClassReader classReader = new ClassReader(transform.getClassWriter().toByteArray());
-                    
-                    transform.setClassReader(classReader);
-                    transform.setClassWriter(null);
-                }
-                
                 transformer.execute(transform);
             } catch (Exception ex) {
                 Reconstruct.getInstance().getLogger().error("{} encountered an error while processing {}", Toolbox.getClassSimpleName(transform.getClass()), className, ex);
                 return false;
             }
-        }
-        
-        if (transform.getClassReader() != null && transform.getClassWriter() == null) {
-            ClassWriter classWriter = new ClassWriter(transform.getClassReader(), 0);
-            transform.setClassWriter(classWriter);
         }
         
         return true;

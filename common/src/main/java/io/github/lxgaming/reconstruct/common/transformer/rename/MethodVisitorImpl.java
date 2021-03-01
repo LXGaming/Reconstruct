@@ -34,12 +34,12 @@ public class MethodVisitorImpl extends MethodVisitor {
     
     @Override
     public void visitParameter(String name, int access) {
-        mv.visitParameter(getName(name), access);
+        super.visitParameter(getName(name), access);
     }
     
     @Override
     public void visitLocalVariable(String name, String descriptor, String signature, Label start, Label end, int index) {
-        mv.visitLocalVariable(getName(name), descriptor, signature, start, end, index);
+        super.visitLocalVariable(getName(name), descriptor, signature, start, end, index);
     }
     
     private String getName(String name) {

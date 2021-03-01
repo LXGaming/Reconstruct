@@ -24,7 +24,6 @@ import io.github.lxgaming.reconstruct.common.bytecode.RcField;
 import io.github.lxgaming.reconstruct.common.bytecode.RcMethod;
 import io.github.lxgaming.reconstruct.common.entity.Transform;
 import io.github.lxgaming.reconstruct.common.transformer.Transformer;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.commons.ClassRemapper;
 import proguard.obfuscate.MappingReader;
 
@@ -96,9 +95,7 @@ public class ProGuardTransformer extends Transformer {
             transform.setClassName(currentClass.getName());
         }
         
-        transform.setClassWriter(new ClassWriter(0));
-        ClassRemapper classRemapper = new ClassRemapper(transform.getClassWriter(), remapper);
-        transform.getClassReader().accept(classRemapper, 0);
-        transform.getClassWriter().visitEnd();
+        ClassRemapper classRemapper = new ClassRemapper(transform.getClassVisitor(), remapper);
+        transform.setClassVisitor(classRemapper);
     }
 }

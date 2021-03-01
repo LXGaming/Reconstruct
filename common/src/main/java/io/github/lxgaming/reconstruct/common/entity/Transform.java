@@ -16,30 +16,12 @@
 
 package io.github.lxgaming.reconstruct.common.entity;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.ClassVisitor;
 
 public class Transform {
     
-    private ClassReader classReader;
-    private ClassWriter classWriter;
     private String className;
-    
-    public ClassReader getClassReader() {
-        return classReader;
-    }
-    
-    public void setClassReader(ClassReader classReader) {
-        this.classReader = classReader;
-    }
-    
-    public ClassWriter getClassWriter() {
-        return classWriter;
-    }
-    
-    public void setClassWriter(ClassWriter classWriter) {
-        this.classWriter = classWriter;
-    }
+    private ClassVisitor classVisitor;
     
     public String getClassName() {
         return className;
@@ -47,5 +29,13 @@ public class Transform {
     
     public void setClassName(String className) {
         this.className = className;
+    }
+    
+    public ClassVisitor getClassVisitor() {
+        return classVisitor;
+    }
+    
+    public void setClassVisitor(ClassVisitor classVisitor) {
+        this.classVisitor = classVisitor;
     }
 }

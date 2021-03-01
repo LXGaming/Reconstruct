@@ -22,6 +22,7 @@ import io.github.lxgaming.reconstruct.common.entity.Transform;
 import io.github.lxgaming.reconstruct.common.manager.TransformerManager;
 import io.github.lxgaming.reconstruct.common.util.Toolbox;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 
 import java.util.function.Consumer;
 
@@ -48,19 +49,20 @@ public class TransformTask extends Task {
     @Override
     public void execute() throws Exception {
         ClassReader classReader = new ClassReader(bytes);
+        ClassWriter classWriter = new ClassWriter(classReader, 0);
         
         Transform transform = new Transform();
-        transform.setClassReader(classReader);
         transform.setClassName(name);
+        transform.setClassVisitor(classWriter);
         
-        if (!TransformerManager.execute(transform)) {
+        if (TransformerManager.execute(transform)) {
+            classReader.accept(transform.getClassVisitor(), 0);
+            Reconstruct.getInstance().getLogger().info("Transformed {} -> {}", name, transform.getClassName());
+            writeTask.queue(Toolbox.toFileName(transform.getClassName()), classWriter.toByteArray());
+        } else {
             writeTask.queue(Toolbox.toFileName(name), bytes);
-            consumer.accept(this);
-            return;
         }
         
-        Reconstruct.getInstance().getLogger().info("Transformed {} -> {}", name, transform.getClassName());
-        writeTask.queue(Toolbox.toFileName(transform.getClassName()), transform.getClassWriter().toByteArray());
         consumer.accept(this);
     }
 }

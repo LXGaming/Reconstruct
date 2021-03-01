@@ -107,7 +107,7 @@ public class Reconstruct {
         try (JarFile jarFile = new JarFile(path.toFile(), false)) {
             for (Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); ) {
                 JarEntry jarEntry = enumeration.nextElement();
-                if (!jarEntry.getName().endsWith(".class")) {
+                if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
                     continue;
                 }
                 
