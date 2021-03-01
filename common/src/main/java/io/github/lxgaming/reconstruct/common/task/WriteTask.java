@@ -27,6 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -38,11 +40,13 @@ import java.util.zip.ZipOutputStream;
 public class WriteTask extends Task {
     
     private final Path path;
+    private final Set<String> paths;
     private final BlockingQueue<ByteArrayZipEntry> queue;
     private final AtomicBoolean state;
     
     public WriteTask(Path path) {
         this.path = path;
+        this.paths = new HashSet<>();
         this.queue = new LinkedBlockingQueue<>(250);
         this.state = new AtomicBoolean(false);
     }
@@ -63,6 +67,15 @@ public class WriteTask extends Task {
                 ByteArrayZipEntry zipEntry = queue.poll(1L, TimeUnit.MILLISECONDS);
                 if (zipEntry == null) {
                     continue;
+                }
+                
+                int index = 0;
+                while ((index = zipEntry.getName().indexOf('/', index)) != -1) {
+                    String name = zipEntry.getName().substring(0, ++index);
+                    if (paths.add(name)) {
+                        outputStream.putNextEntry(new ZipEntry(name));
+                        outputStream.closeEntry();
+                    }
                 }
                 
                 writeZipEntry(zipEntry, outputStream);
