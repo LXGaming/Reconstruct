@@ -103,8 +103,8 @@ public class Reconstruct {
         instance = null;
     }
     
-    private boolean link(Path inputPath) {
-        try (JarFile jarFile = new JarFile(inputPath.toString(), false)) {
+    private boolean link(Path path) {
+        try (JarFile jarFile = new JarFile(path.toFile(), false)) {
             for (Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); ) {
                 JarEntry jarEntry = enumeration.nextElement();
                 if (!jarEntry.getName().endsWith(".class")) {
