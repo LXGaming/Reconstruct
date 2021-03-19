@@ -42,19 +42,9 @@ dependencies {
     api("org.ow2.asm:asm-commons:9.1")
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier.set("javadoc")
-    from javadoc.destinationDir
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set("sources")
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 javadoc {
@@ -73,8 +63,6 @@ publishing {
             groupId group
             artifactId archivesBaseName
             version version
-            artifact javadocJar
-            artifact sourcesJar
             pom {
                 name = "Reconstruct"
                 description = "ProGuard Deobfuscator"
