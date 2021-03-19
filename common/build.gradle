@@ -21,6 +21,10 @@ blossom {
 configurations {
     jar.enabled = false
     jar.dependsOn("shadowJar")
+
+    tasks.withType(GenerateModuleMetadata) {
+        enabled = false
+    }
 }
 
 repositories {
