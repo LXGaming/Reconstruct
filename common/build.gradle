@@ -22,8 +22,9 @@ configurations {
     jar.enabled = false
     jar.dependsOn("shadowJar")
 
-    tasks.withType(GenerateModuleMetadata) {
-        enabled = false
+    [apiElements, runtimeElements].each {
+        it.outgoing.artifacts.clear()
+        it.outgoing.artifact(shadowJar)
     }
 }
 
@@ -59,7 +60,6 @@ publishing {
             groupId group
             artifactId archivesBaseName
             version version
-            artifact shadowJar
             pom {
                 name = "Reconstruct"
                 description = "ProGuard Deobfuscator"
