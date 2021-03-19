@@ -1,6 +1,7 @@
 # Reconstruct
 
 [![License](https://lxgaming.github.io/badges/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.lxgaming/reconstruct-common)
 
 ## Usage
 ```
@@ -17,7 +18,7 @@ java -jar reconstruct-cli.jar -jar server.jar -mapping server.txt -output server
 ## Library
 Repository: `mavenCentral()`
 <br>
-Dependency: `io.github.lxgaming:reconstruct-common:1.3.3`
+Dependency: `io.github.lxgaming:reconstruct-common:VERSION`
 
 ## License
 Reconstruct is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
