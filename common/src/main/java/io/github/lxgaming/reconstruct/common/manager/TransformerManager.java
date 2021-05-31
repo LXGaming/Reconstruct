@@ -45,7 +45,7 @@ public final class TransformerManager {
             try {
                 transformer.execute(transform);
             } catch (Exception ex) {
-                Reconstruct.getInstance().getLogger().error("{} encountered an error while processing {}", Toolbox.getClassSimpleName(transform.getClass()), className, ex);
+                Reconstruct.getInstance().getLogger().error("{} encountered an error while processing {}", Toolbox.getClassSimpleName(transformer.getClass()), className, ex);
                 return false;
             }
         }
