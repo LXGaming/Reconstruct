@@ -1,25 +1,26 @@
 plugins {
     id "com.github.johnrengelman.shadow"
-    id "java"
-    id "signing"
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-group = "io.github.lxgaming"
 archivesBaseName = "reconstruct-cli"
-version = version
 
 configurations {
     shadow {
-        runtime.extendsFrom(shadow)
+        runtimeOnly.extendsFrom(shadow)
     }
 
     build.dependsOn("signJar")
     compileJava.dependsOn(":reconstruct-common:build")
     jar.enabled = false
     jar.dependsOn("shadowJar")
+
+    [apiElements, runtimeElements].each {
+        it.outgoing.artifacts.clear()
+        it.outgoing.artifact(shadowJar)
+    }
 }
 
 repositories {
@@ -30,7 +31,7 @@ dependencies {
         exclude(module: "proguard-base")
     }
     shadow("com.beust:jcommander:1.81")
-    runtime("net.sf.proguard:proguard-base:6.2.2")
+    runtimeOnly("net.sf.proguard:proguard-base:6.2.2")
     shadow("org.apache.logging.log4j:log4j-core:2.14.1")
     shadow("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
     shadow("org.fusesource.jansi:jansi:2.3.2")
@@ -39,6 +40,16 @@ dependencies {
 jar {
     manifest {
         attributes("Main-Class": "io.github.lxgaming.reconstruct.cli.Main")
+    }
+}
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            artifact javadocJar
+            artifact shadowJar
+            artifact sourcesJar
+        }
     }
 }
 

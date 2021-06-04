@@ -1,18 +1,13 @@
 plugins {
     id "com.github.johnrengelman.shadow"
-    id "java"
     id "java-library"
-    id "maven-publish"
     id "net.kyori.blossom"
-    id "signing"
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-group = "io.github.lxgaming"
 archivesBaseName = "reconstruct-common"
-version = version
 
 blossom {
     replaceToken("@version@", version)
@@ -35,17 +30,7 @@ dependencies {
     api("io.github.lxgaming:common:1.1.1")
     compileOnly("net.sf.proguard:proguard-base:6.2.2")
     api("org.slf4j:slf4j-api:1.7.30")
-    testCompile("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     api("org.ow2.asm:asm-commons:9.1")
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-javadoc {
-    failOnError = false
 }
 
 processResources {
@@ -57,47 +42,6 @@ publishing {
     publications {
         mavenPublication(MavenPublication) {
             from components.java
-            groupId group
-            artifactId archivesBaseName
-            version version
-            pom {
-                name = "Reconstruct"
-                description = "ProGuard Deobfuscator"
-                url = "https://github.com/LXGaming/Reconstruct"
-                developers {
-                    developer {
-                        id = "lxgaming"
-                        name = "LXGaming"
-                    }
-                }
-                issueManagement {
-                    system = "GitHub Issues"
-                    url = "https://github.com/LXGaming/Reconstruct/issues"
-                }
-                licenses {
-                    license {
-                        name = "The Apache License, Version 2.0"
-                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                    }
-                }
-                scm {
-                    connection = "scm:git@github.com:LXGaming/Reconstruct.git"
-                    developerConnection = "scm:git@github.com:LXGaming/Reconstruct.git"
-                    url = "https://github.com/LXGaming/Reconstruct"
-                }
-            }
-        }
-    }
-    repositories {
-        if (project.hasProperty("sonatype.username") && project.hasProperty("sonatype.password")) {
-            maven {
-                name = "sonatype"
-                url = version.contains("-SNAPSHOT") ? "https://oss.sonatype.org/content/repositories/snapshots" : "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-                credentials {
-                    username project.property("sonatype.username")
-                    password project.property("sonatype.password")
-                }
-            }
         }
     }
 }
@@ -114,12 +58,4 @@ shadowJar {
 
         return false
     }
-}
-
-signing {
-    sign publishing.publications
-}
-
-test {
-    useJUnitPlatform()
 }
