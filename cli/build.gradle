@@ -12,11 +12,6 @@ configurations {
         runtimeOnly.extendsFrom(shadow)
     }
 
-    build.dependsOn("signJar")
-    compileJava.dependsOn(":reconstruct-common:build")
-    jar.enabled = false
-    jar.dependsOn("shadowJar")
-
     [apiElements, runtimeElements].each {
         it.outgoing.artifacts.clear()
         it.outgoing.artifact(shadowJar)
@@ -37,7 +32,17 @@ dependencies {
     shadow("org.fusesource.jansi:jansi:2.3.2")
 }
 
+build {
+    dependsOn("signJar")
+}
+
+compileJava {
+    dependsOn(":reconstruct-common:build")
+}
+
 jar {
+    enabled = false
+    dependsOn("shadowJar")
     manifest {
         attributes("Main-Class": "io.github.lxgaming.reconstruct.cli.Main")
     }
