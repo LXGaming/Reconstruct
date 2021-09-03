@@ -26,7 +26,7 @@ repositories {
 dependencies {
     api("io.github.lxgaming:common:1.1.1")
     compileOnly("net.sf.proguard:proguard-base:6.2.2")
-    api("org.slf4j:slf4j-api:1.7.31")
+    api("org.slf4j:slf4j-api:1.7.32")
     api("org.ow2.asm:asm-commons:9.2")
 }
 
