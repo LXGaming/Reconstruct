@@ -16,58 +16,66 @@
 
 package io.github.lxgaming.reconstruct.common.transformer.rename;
 
-import io.github.lxgaming.reconstruct.common.util.StringUtils;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 public class MethodVisitorImpl extends MethodVisitor {
     
-    private final int arguments;
-    private int parameters = 0;
-    private int variables = 0;
+    private final boolean isStatic;
+    private final int parameterTotal;
+    private int parameterIndex;
+    private int variableIndex;
     
-    public MethodVisitorImpl(int arguments, MethodVisitor methodVisitor) {
+    public MethodVisitorImpl(MethodVisitor methodVisitor, boolean isStatic, int parameterTotal) {
         super(Opcodes.ASM7, methodVisitor);
-        this.arguments = arguments;
+        this.isStatic = isStatic;
+        this.parameterTotal = parameterTotal;
     }
     
     @Override
     public void visitParameter(String name, int access) {
-        super.visitParameter(getName(name), access);
+        if (isValidJavaIdentifier(name)) {
+            super.visitParameter(name, access);
+        } else {
+            super.visitParameter("param" + parameterIndex, access);
+        }
+        
+        parameterIndex += 1;
     }
     
     @Override
     public void visitLocalVariable(String name, String descriptor, String signature, Label start, Label end, int index) {
-        super.visitLocalVariable(getName(name), descriptor, signature, start, end, index);
-    }
-    
-    private String getName(String name) {
-        if (StringUtils.isBlank(name)) {
-            return getName();
-        }
-        
-        if (name.equals("this")) {
-            return name;
-        }
-        
-        if (!name.equals(StringUtils.filter(name))) {
-            return getName();
-        }
-        
-        return name;
-    }
-    
-    private String getName() {
-        String name;
-        if (arguments > parameters) {
-            name = "param_" + parameters;
-            parameters += 1;
+        int parameters = isStatic ? parameterTotal : parameterTotal + 1;
+        if (isValidJavaIdentifier(name)) {
+            super.visitLocalVariable(name, descriptor, signature, start, end, index);
+        } else if (variableIndex == 0 && !isStatic) {
+            super.visitLocalVariable("this", descriptor, signature, start, end, index);
+        } else if (variableIndex < parameters) {
+            super.visitLocalVariable("param" + (variableIndex - (isStatic ? 0 : 1)), descriptor, signature, start, end, index);
         } else {
-            name = "var_" + variables;
-            variables += 1;
+            // super.visitLocalVariable("var" + (variableIndex - parameters), descriptor, signature, start, end, index);
+            super.visitLocalVariable("var" + index, descriptor, signature, start, end, index);
         }
         
-        return name;
+        variableIndex += 1;
+    }
+    
+    protected boolean isValidJavaIdentifier(String name) {
+        if (name == null || name.isEmpty()) {
+            return false;
+        }
+        
+        if (!Character.isJavaIdentifierStart(name.charAt(0))) {
+            return false;
+        }
+        
+        for (int index = 0; index < name.length(); index++) {
+            if (!Character.isJavaIdentifierPart(name.charAt(index))) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }

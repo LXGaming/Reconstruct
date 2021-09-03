@@ -20,6 +20,7 @@ import io.github.lxgaming.reconstruct.common.util.Toolbox;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 
 public class ClassVisitorImpl extends ClassVisitor {
     
@@ -34,7 +35,11 @@ public class ClassVisitorImpl extends ClassVisitor {
             return null;
         }
         
-        int arguments = Toolbox.countArguments(descriptor);
-        return new MethodVisitorImpl(arguments, methodVisitor);
+        int arguments = Toolbox.countArguments(Type.getMethodType(descriptor));
+        return new MethodVisitorImpl(
+                methodVisitor,
+                (access & Opcodes.ACC_STATIC) != 0,
+                arguments
+        );
     }
 }

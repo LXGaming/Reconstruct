@@ -18,6 +18,7 @@ package io.github.lxgaming.reconstruct.common.util;
 
 import io.github.lxgaming.common.concurrent.BasicThreadFactory;
 import io.github.lxgaming.reconstruct.common.Reconstruct;
+import org.objectweb.asm.Type;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -129,26 +130,13 @@ public class Toolbox {
         }
     }
     
-    public static int countArguments(String descriptor) {
-        int arguments = 0;
-        // Skip the first character, which is always a '('
-        int index = 1;
-        
-        while (descriptor.charAt(index) != ')') {
-            while (descriptor.charAt(index) == '[') {
-                index += 1;
-            }
-            
-            if (descriptor.charAt(index) == 'L') {
-                index = descriptor.indexOf(';', index) + 1;
-            } else {
-                index += 1;
-            }
-            
-            arguments += 1;
+    public static int countArguments(Type type) {
+        int count = 0;
+        for (Type argumentType : type.getArgumentTypes()) {
+            count += argumentType.getSize();
         }
         
-        return arguments;
+        return count;
     }
     
     public static String fromFileName(String name) {
