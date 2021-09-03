@@ -51,7 +51,7 @@ public class RemapperImpl extends Remapper {
             return name;
         }
         
-        Reconstruct.getInstance().getLogger().debug("Method {}.{}{} -> {}.{}{}", owner, name, descriptor, owner, currentMethod.getName(), descriptor);
+        Reconstruct.getInstance().getLogger().trace("Method {}.{}{} -> {}.{}{}", owner, name, descriptor, owner, currentMethod.getName(), descriptor);
         return currentMethod.getName();
     }
     
@@ -67,7 +67,7 @@ public class RemapperImpl extends Remapper {
             return name;
         }
         
-        Reconstruct.getInstance().getLogger().debug("Field {}.{}:{} -> {}.{}:{}", owner, name, descriptor, owner, currentField.getName(), descriptor);
+        Reconstruct.getInstance().getLogger().trace("Field {}.{}:{} -> {}.{}:{}", owner, name, descriptor, owner, currentField.getName(), descriptor);
         return currentField.getName();
     }
     
@@ -90,7 +90,7 @@ public class RemapperImpl extends Remapper {
         RcClass currentClass = Reconstruct.getInstance().getClass(name, attribute).orElse(null);
         if (currentClass != null) {
             cachedClasses.add(currentClass);
-            Reconstruct.getInstance().getLogger().debug("Class {} -> {}", name, currentClass.getName());
+            Reconstruct.getInstance().getLogger().trace("Class {} -> {}", name, currentClass.getName());
             return currentClass;
         }
         

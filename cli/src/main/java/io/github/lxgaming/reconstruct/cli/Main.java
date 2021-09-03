@@ -52,7 +52,11 @@ public class Main {
             return;
         }
         
-        if (Reconstruct.getInstance().getConfig().isDebug()) {
+        if (Reconstruct.getInstance().getConfig().isTrace()) {
+            System.setProperty("reconstruct.logging.console.level", "TRACE");
+            Configurator.reconfigure();
+            Reconstruct.getInstance().getLogger().trace("Trace mode enabled");
+        } else if (Reconstruct.getInstance().getConfig().isDebug()) {
             System.setProperty("reconstruct.logging.console.level", "DEBUG");
             Configurator.reconfigure();
             Reconstruct.getInstance().getLogger().debug("Debug mode enabled");

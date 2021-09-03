@@ -57,7 +57,7 @@ public class TransformTask extends Task {
         
         if (TransformerManager.execute(transform)) {
             classReader.accept(transform.getClassVisitor(), 0);
-            Reconstruct.getInstance().getLogger().info("Transformed {} -> {}", name, transform.getClassName());
+            Reconstruct.getInstance().getLogger().debug("Transformed {} -> {}", name, transform.getClassName());
             writeTask.queue(Toolbox.toFileName(transform.getClassName()), classWriter.toByteArray());
         } else {
             writeTask.queue(Toolbox.toFileName(name), bytes);

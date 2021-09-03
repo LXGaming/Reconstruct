@@ -80,8 +80,8 @@ public class Reconstruct {
             return;
         }
         
-        if (getConfig().getThreads() <= 0) {
-            getLogger().warn("Threads is out of bounds. Resetting to {}", Runtime.getRuntime().availableProcessors());
+        if (getConfig().getThreads() <= 0 || getConfig().getThreads() > Runtime.getRuntime().availableProcessors()) {
+            getLogger().info("Using {} threads", Runtime.getRuntime().availableProcessors());
             getConfig().setThreads(Runtime.getRuntime().availableProcessors());
         }
         
@@ -104,6 +104,7 @@ public class Reconstruct {
     }
     
     private boolean link(Path path) {
+        getLogger().info("Linking...");
         try (JarFile jarFile = new JarFile(path.toFile(), false)) {
             for (Enumeration<JarEntry> enumeration = jarFile.entries(); enumeration.hasMoreElements(); ) {
                 JarEntry jarEntry = enumeration.nextElement();
@@ -114,7 +115,7 @@ public class Reconstruct {
                 try (InputStream inputStream = jarFile.getInputStream(jarEntry)) {
                     String name = Toolbox.fromFileName(jarEntry.getName());
                     if (StringUtils.startsWith(getConfig().getExcludedPackages(), name)) {
-                        getLogger().debug("Skipping {}", name);
+                        getLogger().trace("Skipping {}", name);
                         continue;
                     }
                     
@@ -156,6 +157,7 @@ public class Reconstruct {
     }
     
     private void transform(Path inputPath, Path outputPath) {
+        getLogger().info("Transforming...");
         WriteTask writeTask = new WriteTask(outputPath);
         TaskManager.schedule(writeTask);
         
@@ -198,7 +200,7 @@ public class Reconstruct {
                     
                     String name = Toolbox.fromFileName(jarEntry.getName());
                     if (StringUtils.startsWith(getConfig().getExcludedPackages(), name)) {
-                        getLogger().debug("Skipping {}", name);
+                        getLogger().trace("Skipping {}", name);
                         writeTask.queue(jarEntry, inputStream);
                         continue;
                     }

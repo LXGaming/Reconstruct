@@ -61,7 +61,7 @@ public class Toolbox {
         if (!list.isEmpty()) {
             T t = list.remove(0);
             if (!list.isEmpty()) {
-                Reconstruct.getInstance().getLogger().debug("Multiple {} found", t.getClass().getSimpleName());
+                Reconstruct.getInstance().getLogger().trace("Multiple {} found", t.getClass().getSimpleName());
             }
             
             return t;

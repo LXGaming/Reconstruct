@@ -23,6 +23,8 @@ public interface Config {
     
     boolean isDebug();
     
+    boolean isTrace();
+    
     int getThreads();
     
     void setThreads(int threads);

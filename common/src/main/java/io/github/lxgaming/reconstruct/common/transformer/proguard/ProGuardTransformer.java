@@ -52,6 +52,7 @@ public class ProGuardTransformer extends Transformer {
         }
         
         try {
+            Reconstruct.getInstance().getLogger().info("Parsing mappings...");
             MappingReader mappingReader = new MappingReader(path.toFile());
             mappingReader.pump(new MappingProcessorImpl());
             

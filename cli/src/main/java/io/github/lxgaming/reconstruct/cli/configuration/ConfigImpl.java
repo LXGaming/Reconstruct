@@ -28,6 +28,9 @@ public class ConfigImpl implements Config {
     @Parameter(names = {"-debug", "--debug"}, description = "For debugging purposes")
     private boolean debug = false;
     
+    @Parameter(names = {"-trace", "--trace"}, description = "For debugging purposes")
+    private boolean trace = false;
+    
     @Parameter(names = {"-thread", "--thread", "-threads", "--threads"}, description = "Performs deobfuscation asynchronously across the specified number of threads")
     private int threads = 0;
     
@@ -52,6 +55,11 @@ public class ConfigImpl implements Config {
     @Override
     public boolean isDebug() {
         return debug;
+    }
+    
+    @Override
+    public boolean isTrace() {
+        return trace;
     }
     
     @Override
