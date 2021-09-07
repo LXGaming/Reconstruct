@@ -53,7 +53,6 @@ public class MethodVisitorImpl extends MethodVisitor {
         } else if (index < parameters) {
             super.visitLocalVariable("param" + (index - (isStatic ? 0 : 1)), descriptor, signature, start, end, index);
         } else {
-            // super.visitLocalVariable("var" + (variableIndex - parameters), descriptor, signature, start, end, index);
             super.visitLocalVariable("var" + index, descriptor, signature, start, end, index);
         }
     }
