@@ -25,7 +25,6 @@ public class MethodVisitorImpl extends MethodVisitor {
     private final boolean isStatic;
     private final int parameterTotal;
     private int parameterIndex;
-    private int variableIndex;
     
     public MethodVisitorImpl(MethodVisitor methodVisitor, boolean isStatic, int parameterTotal) {
         super(Opcodes.ASM7, methodVisitor);
@@ -49,16 +48,14 @@ public class MethodVisitorImpl extends MethodVisitor {
         int parameters = isStatic ? parameterTotal : parameterTotal + 1;
         if (isValidJavaIdentifier(name)) {
             super.visitLocalVariable(name, descriptor, signature, start, end, index);
-        } else if (variableIndex == 0 && !isStatic) {
+        } else if (index == 0 && !isStatic) {
             super.visitLocalVariable("this", descriptor, signature, start, end, index);
-        } else if (variableIndex < parameters) {
-            super.visitLocalVariable("param" + (variableIndex - (isStatic ? 0 : 1)), descriptor, signature, start, end, index);
+        } else if (index < parameters) {
+            super.visitLocalVariable("param" + (index - (isStatic ? 0 : 1)), descriptor, signature, start, end, index);
         } else {
             // super.visitLocalVariable("var" + (variableIndex - parameters), descriptor, signature, start, end, index);
             super.visitLocalVariable("var" + index, descriptor, signature, start, end, index);
         }
-        
-        variableIndex += 1;
     }
     
     protected boolean isValidJavaIdentifier(String name) {
