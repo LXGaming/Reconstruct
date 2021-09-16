@@ -22,14 +22,11 @@ repositories {
 }
 
 dependencies {
-    shadow(project(path: ":reconstruct-common")) {
-        exclude(module: "proguard-base")
-    }
-    shadow("com.beust:jcommander:1.81")
-    runtimeOnly("net.sf.proguard:proguard-base:6.2.2")
-    shadow("org.apache.logging.log4j:log4j-core:2.14.1")
-    shadow("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
-    shadow("org.fusesource.jansi:jansi:2.3.4")
+    implementation(project(path: ":reconstruct-common"))
+    implementation("com.beust:jcommander:1.81")
+    implementation("org.apache.logging.log4j:log4j-core:2.14.1")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.14.1")
+    implementation("org.fusesource.jansi:jansi:2.3.4")
 }
 
 build {
@@ -60,7 +57,9 @@ publishing {
 
 shadowJar {
     archiveClassifier.set(null)
-    configurations = [project.configurations.shadow]
+    dependencies {
+        exclude(dependency("net.sf.proguard:proguard-base"))
+    }
 }
 
 task signJar {
