@@ -19,6 +19,7 @@ package io.github.lxgaming.reconstruct.common.manager;
 import io.github.lxgaming.reconstruct.common.Reconstruct;
 import io.github.lxgaming.reconstruct.common.entity.Transform;
 import io.github.lxgaming.reconstruct.common.transformer.Transformer;
+import io.github.lxgaming.reconstruct.common.transformer.minecraft.MinecraftTransformer;
 import io.github.lxgaming.reconstruct.common.transformer.proguard.ProGuardTransformer;
 import io.github.lxgaming.reconstruct.common.transformer.rename.RenameTransformer;
 import io.github.lxgaming.reconstruct.common.util.StringUtils;
@@ -35,6 +36,7 @@ public final class TransformerManager {
     private static final Set<Class<? extends Transformer>> TRANSFORMER_CLASSES = new HashSet<>();
     
     public static void prepare() {
+        registerTransformer(MinecraftTransformer.class);
         registerTransformer(ProGuardTransformer.class);
         registerTransformer(RenameTransformer.class);
     }
