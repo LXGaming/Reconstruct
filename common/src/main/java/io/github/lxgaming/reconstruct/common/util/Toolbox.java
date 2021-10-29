@@ -152,14 +152,6 @@ public class Toolbox {
         return type.getSimpleName();
     }
     
-    public static <T> T newInstance(Class<? extends T> type) {
-        try {
-            return type.newInstance();
-        } catch (Throwable ex) {
-            return null;
-        }
-    }
-    
     public static ThreadFactory newThreadFactory(String format) {
         return BasicThreadFactory.builder().daemon(true).format(format).priority(Thread.NORM_PRIORITY).build();
     }

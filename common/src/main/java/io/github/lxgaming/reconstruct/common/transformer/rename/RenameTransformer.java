@@ -21,10 +21,8 @@ import io.github.lxgaming.reconstruct.common.transformer.Transformer;
 
 public class RenameTransformer extends Transformer {
     
-    @Override
-    public boolean initialize() {
+    public RenameTransformer() {
         addAlias("rename");
-        return true;
     }
     
     @Override

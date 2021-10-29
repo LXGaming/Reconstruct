@@ -33,10 +33,8 @@ import java.nio.file.Path;
 
 public class ProGuardTransformer extends Transformer {
     
-    @Override
-    public boolean initialize() {
+    public ProGuardTransformer() {
         addAlias("proguard");
-        return true;
     }
     
     @Override

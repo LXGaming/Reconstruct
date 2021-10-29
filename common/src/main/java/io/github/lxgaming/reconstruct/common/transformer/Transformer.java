@@ -26,8 +26,6 @@ public abstract class Transformer {
     
     private final Set<String> aliases = new LinkedHashSet<>();
     
-    public abstract boolean initialize();
-    
     public abstract boolean prepare();
     
     public abstract void execute(Transform transform) throws Exception;

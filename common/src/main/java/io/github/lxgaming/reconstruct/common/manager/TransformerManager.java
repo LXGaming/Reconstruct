@@ -45,7 +45,7 @@ public final class TransformerManager {
             try {
                 transformer.execute(transform);
             } catch (Exception ex) {
-                Reconstruct.getInstance().getLogger().error("{} encountered an error while processing {}", Toolbox.getClassSimpleName(transformer.getClass()), className, ex);
+                Reconstruct.getInstance().getLogger().error("{} encountered an error while executing {}", Toolbox.getClassSimpleName(transformer.getClass()), className, ex);
                 return false;
             }
         }
@@ -71,24 +71,16 @@ public final class TransformerManager {
         }
         
         TRANSFORMER_CLASSES.add(transformerClass);
-        Transformer transformer = Toolbox.newInstance(transformerClass);
-        if (transformer == null) {
-            Reconstruct.getInstance().getLogger().error("{} failed to initialize", Toolbox.getClassSimpleName(transformerClass));
-            return false;
-        }
         
+        Transformer transformer;
         try {
-            if (!transformer.initialize()) {
-                Reconstruct.getInstance().getLogger().warn("{} failed to initialize", Toolbox.getClassSimpleName(transformerClass));
-                return false;
-            }
-        } catch (Exception ex) {
+            transformer = transformerClass.newInstance();
+        } catch (Throwable ex) {
             Reconstruct.getInstance().getLogger().error("Encountered an error while initializing {}", Toolbox.getClassSimpleName(transformerClass), ex);
             return false;
         }
         
-        Collection<String> transformers = Reconstruct.getInstance().getConfig().getTransformers();
-        if (transformers != null && !transformers.isEmpty() && !StringUtils.containsIgnoreCase(transformers, transformer.getAliases())) {
+        if (!shouldRegister(transformer)) {
             return false;
         }
         
@@ -105,5 +97,19 @@ public final class TransformerManager {
         TRANSFORMERS.add(transformer);
         Reconstruct.getInstance().getLogger().debug("{} registered", Toolbox.getClassSimpleName(transformerClass));
         return true;
+    }
+    
+    public static boolean shouldRegister(Transformer transformer) {
+        Collection<String> aliases = transformer.getAliases();
+        if (aliases == null || aliases.isEmpty()) {
+            return true;
+        }
+        
+        Collection<String> transformers = Reconstruct.getInstance().getConfig().getTransformers();
+        if (transformers == null || transformers.isEmpty()) {
+            return true;
+        }
+        
+        return StringUtils.containsIgnoreCase(transformers, aliases);
     }
 }
