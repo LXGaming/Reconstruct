@@ -17,7 +17,7 @@
 package io.github.lxgaming.reconstruct.cli.configuration;
 
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.PathConverter;
+import io.github.lxgaming.reconstruct.cli.util.AbsolutePathConverter;
 import io.github.lxgaming.reconstruct.common.configuration.Config;
 
 import java.nio.file.Path;
@@ -37,13 +37,13 @@ public class ConfigImpl implements Config {
     @Parameter(names = {"-transformer", "--transformer", "-transformers", "--transformers"}, description = "Transformers to use during the deobfuscation process")
     private List<String> transformers = null;
     
-    @Parameter(names = {"-input", "--input", "-jar", "--jar"}, description = "Obfuscated Jar Path", required = true, converter = PathConverter.class)
+    @Parameter(names = {"-input", "--input", "-jar", "--jar"}, description = "Obfuscated Jar Path", required = true, converter = AbsolutePathConverter.class)
     private Path inputPath = null;
     
-    @Parameter(names = {"-mapping", "--mapping"}, description = "ProGuard Mappings Path", required = true, converter = PathConverter.class)
+    @Parameter(names = {"-mapping", "--mapping"}, description = "ProGuard Mappings Path", required = true, converter = AbsolutePathConverter.class)
     private Path mappingPath = null;
     
-    @Parameter(names = {"-output", "--output"}, description = "Output Jar Path", required = true, converter = PathConverter.class)
+    @Parameter(names = {"-output", "--output"}, description = "Output Jar Path", required = true, converter = AbsolutePathConverter.class)
     private Path outputPath = null;
     
     @Parameter(names = {"-exclude", "--exclude", "-excludes", "--excludes", "-excluded", "--excluded"}, description = "Packages which won't be transformed")
