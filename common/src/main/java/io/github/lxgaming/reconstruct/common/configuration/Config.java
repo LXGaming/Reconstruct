@@ -33,9 +33,15 @@ public interface Config {
     
     Path getInputPath();
     
+    void setInputPath(Path inputPath);
+    
     Path getMappingPath();
     
+    void setMappingPath(Path mappingPath);
+    
     Path getOutputPath();
+    
+    void setOutputPath(Path outputPath);
     
     Collection<String> getExcludedPackages();
 }

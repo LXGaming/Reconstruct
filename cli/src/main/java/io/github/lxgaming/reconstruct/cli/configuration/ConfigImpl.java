@@ -83,13 +83,28 @@ public class ConfigImpl implements Config {
     }
     
     @Override
+    public void setInputPath(Path inputPath) {
+        this.inputPath = inputPath;
+    }
+    
+    @Override
     public Path getMappingPath() {
         return mappingPath;
     }
     
     @Override
+    public void setMappingPath(Path mappingPath) {
+        this.mappingPath = mappingPath;
+    }
+    
+    @Override
     public Path getOutputPath() {
         return outputPath;
+    }
+    
+    @Override
+    public void setOutputPath(Path outputPath) {
+        this.outputPath = outputPath;
     }
     
     @Override
