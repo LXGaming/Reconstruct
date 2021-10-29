@@ -31,7 +31,7 @@ public interface Config {
     
     Collection<String> getTransformers();
     
-    Path getJarPath();
+    Path getInputPath();
     
     Path getMappingPath();
     

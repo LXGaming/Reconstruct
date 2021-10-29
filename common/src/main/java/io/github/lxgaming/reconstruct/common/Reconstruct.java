@@ -75,7 +75,7 @@ public class Reconstruct {
     }
     
     public void load() {
-        if (getConfig().getJarPath() == null || getConfig().getMappingPath() == null || getConfig().getOutputPath() == null) {
+        if (getConfig().getInputPath() == null || getConfig().getMappingPath() == null || getConfig().getOutputPath() == null) {
             getLogger().error("Invalid arguments");
             return;
         }
@@ -90,11 +90,11 @@ public class Reconstruct {
         TaskManager.prepare();
         TransformerManager.prepare();
         
-        if (!link(getConfig().getJarPath())) {
+        if (!link(getConfig().getInputPath())) {
             return;
         }
         
-        transform(getConfig().getJarPath(), getConfig().getOutputPath());
+        transform(getConfig().getInputPath(), getConfig().getOutputPath());
     }
     
     public void shutdown() {

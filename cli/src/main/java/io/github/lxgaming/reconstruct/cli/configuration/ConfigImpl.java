@@ -37,8 +37,8 @@ public class ConfigImpl implements Config {
     @Parameter(names = {"-transformer", "--transformer", "-transformers", "--transformers"}, description = "Transformers to use during the deobfuscation process")
     private List<String> transformers = null;
     
-    @Parameter(names = {"-jar", "--jar", "-input", "--input"}, description = "Obfuscated Jar Path", required = true, converter = PathConverter.class)
-    private Path jarPath = null;
+    @Parameter(names = {"-input", "--input", "-jar", "--jar"}, description = "Obfuscated Jar Path", required = true, converter = PathConverter.class)
+    private Path inputPath = null;
     
     @Parameter(names = {"-mapping", "--mapping"}, description = "ProGuard Mappings Path", required = true, converter = PathConverter.class)
     private Path mappingPath = null;
@@ -78,8 +78,8 @@ public class ConfigImpl implements Config {
     }
     
     @Override
-    public Path getJarPath() {
-        return jarPath;
+    public Path getInputPath() {
+        return inputPath;
     }
     
     @Override
