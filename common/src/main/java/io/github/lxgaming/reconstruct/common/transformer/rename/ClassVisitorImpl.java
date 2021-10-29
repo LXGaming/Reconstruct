@@ -25,7 +25,7 @@ import org.objectweb.asm.Type;
 public class ClassVisitorImpl extends ClassVisitor {
     
     public ClassVisitorImpl(ClassVisitor classVisitor) {
-        super(Opcodes.ASM7, classVisitor);
+        super(Opcodes.ASM9, classVisitor);
     }
     
     @Override

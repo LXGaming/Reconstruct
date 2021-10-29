@@ -27,7 +27,7 @@ public class MethodVisitorImpl extends MethodVisitor {
     private int parameterIndex;
     
     public MethodVisitorImpl(MethodVisitor methodVisitor, boolean isStatic, int parameterTotal) {
-        super(Opcodes.ASM7, methodVisitor);
+        super(Opcodes.ASM9, methodVisitor);
         this.isStatic = isStatic;
         this.parameterTotal = parameterTotal;
     }
