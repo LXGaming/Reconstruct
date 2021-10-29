@@ -20,9 +20,6 @@ import io.github.lxgaming.common.concurrent.BasicThreadFactory;
 import io.github.lxgaming.reconstruct.common.Reconstruct;
 import org.objectweb.asm.Type;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -47,14 +44,6 @@ public class Toolbox {
             return Optional.empty();
         } catch (NoSuchElementException ex) {
             return Optional.empty();
-        }
-    }
-    
-    public static void transferBytes(InputStream inputStream, OutputStream outputStream) throws IOException {
-        byte[] buffer = new byte[8192];
-        int read;
-        while ((read = inputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, read);
         }
     }
     

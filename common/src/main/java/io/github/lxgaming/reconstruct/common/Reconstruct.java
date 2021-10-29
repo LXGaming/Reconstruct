@@ -26,6 +26,7 @@ import io.github.lxgaming.reconstruct.common.manager.TaskManager;
 import io.github.lxgaming.reconstruct.common.manager.TransformerManager;
 import io.github.lxgaming.reconstruct.common.task.TransformTask;
 import io.github.lxgaming.reconstruct.common.task.WriteTask;
+import io.github.lxgaming.reconstruct.common.util.IOUtils;
 import io.github.lxgaming.reconstruct.common.util.StringUtils;
 import io.github.lxgaming.reconstruct.common.util.Toolbox;
 import org.objectweb.asm.ClassReader;
@@ -206,7 +207,7 @@ public class Reconstruct {
                     }
                     
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    Toolbox.transferBytes(inputStream, outputStream);
+                    IOUtils.transferBytes(inputStream, outputStream);
                     byte[] bytes = outputStream.toByteArray();
                     
                     TransformTask transformTask = new TransformTask(writeTask, name, bytes, tasks::remove);

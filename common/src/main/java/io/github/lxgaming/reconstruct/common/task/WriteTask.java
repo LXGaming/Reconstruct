@@ -19,7 +19,7 @@ package io.github.lxgaming.reconstruct.common.task;
 import io.github.lxgaming.common.task.Task;
 import io.github.lxgaming.reconstruct.common.Reconstruct;
 import io.github.lxgaming.reconstruct.common.entity.ByteArrayZipEntry;
-import io.github.lxgaming.reconstruct.common.util.Toolbox;
+import io.github.lxgaming.reconstruct.common.util.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -88,14 +88,14 @@ public class WriteTask extends Task {
     private void writeZipEntry(ByteArrayZipEntry zipEntry, ZipOutputStream outputStream) throws Exception {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(zipEntry.getBytes())) {
             outputStream.putNextEntry(zipEntry);
-            Toolbox.transferBytes(inputStream, outputStream);
+            IOUtils.transferBytes(inputStream, outputStream);
             outputStream.closeEntry();
         }
     }
     
     public void queue(ZipEntry zipEntry, InputStream inputStream) throws InterruptedException, IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        Toolbox.transferBytes(inputStream, outputStream);
+        IOUtils.transferBytes(inputStream, outputStream);
         queue(zipEntry, outputStream.toByteArray());
     }
     
