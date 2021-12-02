@@ -23,6 +23,8 @@ import io.github.lxgaming.reconstruct.common.bytecode.RcClass;
 import io.github.lxgaming.reconstruct.common.bytecode.RcField;
 import io.github.lxgaming.reconstruct.common.bytecode.RcMethod;
 import io.github.lxgaming.reconstruct.common.util.Toolbox;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.Remapper;
 
 import java.util.ArrayList;
@@ -37,6 +39,26 @@ public class RemapperImpl extends Remapper {
     
     public RemapperImpl() {
         this.cachedClasses = new HashSet<>();
+    }
+    
+    @Override
+    public Object mapValue(Object value) {
+        if (value instanceof Handle) {
+            // https://gitlab.ow2.org/asm/asm/-/merge_requests/327
+            Handle handle = (Handle) value;
+            boolean isFieldHandle = handle.getTag() <= Opcodes.H_PUTSTATIC;
+            
+            return new Handle(
+                    handle.getTag(),
+                    mapType(handle.getOwner()),
+                    isFieldHandle
+                            ? mapFieldName(handle.getOwner(), handle.getName(), handle.getDesc())
+                            : mapMethodName(handle.getOwner(), handle.getName(), handle.getDesc()),
+                    isFieldHandle ? mapDesc(handle.getDesc()) : mapMethodDesc(handle.getDesc()),
+                    handle.isInterface());
+        }
+        
+        return super.mapValue(value);
     }
     
     @Override
