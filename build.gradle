@@ -65,7 +65,7 @@ subprojects {
             if (project.hasProperty("sonatype.username") && project.hasProperty("sonatype.password")) {
                 maven {
                     name = "sonatype"
-                    url = version.contains("-SNAPSHOT") ? "https://oss.sonatype.org/content/repositories/snapshots" : "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                    url = version.contains("-SNAPSHOT") ? "https://s01.oss.sonatype.org/content/repositories/snapshots" : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
                     credentials {
                         username project.property("sonatype.username")
                         password project.property("sonatype.password")
