@@ -30,7 +30,7 @@ dependencies {
 }
 
 build {
-    dependsOn("signJar")
+    finalizedBy("signJar")
 }
 
 compileJava {
@@ -86,10 +86,10 @@ task signJar {
                 tsaurl: project.property("signing.timestampAuthority"),
                 digestalg: project.property("signing.digestAlgorithm")
             )
-            project.logger.lifecycle("JAR Signed: " + it.name)
+            project.logger.lifecycle("JAR Signed: ${it.name}")
 
             signing.sign(it)
-            project.logger.lifecycle("PGP Signed: " + it.name)
+            project.logger.lifecycle("PGP Signed: ${it.name}")
         }
     }
 }
