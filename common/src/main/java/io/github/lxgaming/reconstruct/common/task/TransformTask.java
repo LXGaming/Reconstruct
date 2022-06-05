@@ -47,22 +47,26 @@ public class TransformTask extends Task {
     }
     
     @Override
-    public void execute() throws Exception {
-        ClassReader classReader = new ClassReader(bytes);
-        ClassWriter classWriter = new ClassWriter(classReader, 0);
-        
-        Transform transform = new Transform();
-        transform.setClassName(name);
-        transform.setClassVisitor(classWriter);
-        
-        if (TransformerManager.execute(transform)) {
-            classReader.accept(transform.getClassVisitor(), 0);
-            Reconstruct.getInstance().getLogger().debug("Transformed {} -> {}", name, transform.getClassName());
-            writeTask.queue(Toolbox.toFileName(transform.getClassName()), classWriter.toByteArray());
-        } else {
-            writeTask.queue(Toolbox.toFileName(name), bytes);
+    public void execute() {
+        try {
+            ClassReader classReader = new ClassReader(bytes);
+            ClassWriter classWriter = new ClassWriter(classReader, 0);
+            
+            Transform transform = new Transform();
+            transform.setClassName(name);
+            transform.setClassVisitor(classWriter);
+            
+            if (TransformerManager.execute(transform)) {
+                classReader.accept(transform.getClassVisitor(), 0);
+                Reconstruct.getInstance().getLogger().debug("Transformed {} -> {}", name, transform.getClassName());
+                writeTask.queue(Toolbox.toFileName(transform.getClassName()), classWriter.toByteArray());
+            } else {
+                writeTask.queue(Toolbox.toFileName(name), bytes);
+            }
+            
+            consumer.accept(this);
+        } catch (Exception ex) {
+            Reconstruct.getInstance().getLogger().error("Encountered an error while transforming {}", name, ex);
         }
-        
-        consumer.accept(this);
     }
 }
