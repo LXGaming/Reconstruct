@@ -32,7 +32,7 @@ public class RenameTransformer extends Transformer {
     
     @Override
     public void execute(Transform transform) throws Exception {
-        ClassVisitorImpl classVisitor = new ClassVisitorImpl(transform.getClassVisitor());
+        ClassVisitorImpl classVisitor = new ClassVisitorImpl(transform.getClassVisitor(), transform.getClassName());
         transform.setClassVisitor(classVisitor);
     }
 }

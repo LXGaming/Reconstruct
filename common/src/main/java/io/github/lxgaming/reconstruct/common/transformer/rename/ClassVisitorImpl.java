@@ -16,6 +16,7 @@
 
 package io.github.lxgaming.reconstruct.common.transformer.rename;
 
+import io.github.lxgaming.reconstruct.common.Reconstruct;
 import io.github.lxgaming.reconstruct.common.util.Toolbox;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -24,13 +25,23 @@ import org.objectweb.asm.Type;
 
 public class ClassVisitorImpl extends ClassVisitor {
     
-    public ClassVisitorImpl(ClassVisitor classVisitor) {
+    private final String className;
+    
+    public ClassVisitorImpl(ClassVisitor classVisitor, String className) {
         super(Opcodes.ASM9, classVisitor);
+        this.className = className;
     }
     
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-        MethodVisitor methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions);
+        MethodVisitor methodVisitor;
+        try {
+            methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions);
+        } catch (Exception ex) {
+            Reconstruct.getInstance().getLogger().error("Encountered an error while renaming {}.{}{} ({})", className, name, descriptor, signature, ex);
+            return null;
+        }
+        
         if (methodVisitor == null) {
             return null;
         }
