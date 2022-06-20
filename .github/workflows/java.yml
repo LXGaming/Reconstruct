@@ -1,6 +1,8 @@
 name: Java
 
 on:
+  create:
+    tags: [ 'v*.*.*' ]
   push:
     branches: [ master ]
   pull_request:
@@ -38,3 +40,19 @@ jobs:
       env:
         BUILD_NUMBER: ${{ github.run_number }}
       run: ./gradlew build --console=plain --refresh-dependencies
+    - name: Publish
+      if: github.event_name == 'create' && github.event.ref_type == 'tag'
+      run: ./gradlew publish --console=plain
+      env:
+        ORG_GRADLE_PROJECT_sonatype.username: ${{ secrets.SONATYPE_USERNAME }}
+        ORG_GRADLE_PROJECT_sonatype.password: ${{ secrets.SONATYPE_PASSWORD }}
+    - name: Setup Release
+      if: github.event_name == 'create' && github.event.ref_type == 'tag'
+      run: echo "release_name=${GITHUB_REPOSITORY#*/} ${GITHUB_REF_NAME}" >> $GITHUB_ENV
+    - name: Release
+      if: github.event_name == 'create' && github.event.ref_type == 'tag'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./*/build/libs/*.jar
+        generate_release_notes: true
+        name: ${{ env.release_name }}
