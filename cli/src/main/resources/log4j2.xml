@@ -2,7 +2,7 @@
 <Configuration status="WARN" shutdownHook="disable">
     <Appenders>
         <Console name="Console">
-            <PatternLayout pattern="%highlight{[%d{HH:mm:ss}] [%t/%level]: %msg%n%xEx}{WARN=BRIGHT YELLOW,INFO=RESET,DEBUG=BRIGHT CYAN,TRACE=BRIGHT MAGENTA}"/>
+            <PatternLayout pattern="%highlight{[%d{HH:mm:ss}] [%t/%level]: %msg%n%xEx}{WARN=BRIGHT YELLOW,INFO=NORMAL,DEBUG=BRIGHT CYAN,TRACE=BRIGHT MAGENTA}"/>
         </Console>
         <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz" immediateFlush="false">>
             <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n"/>
