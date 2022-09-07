@@ -62,13 +62,13 @@ subprojects {
             }
         }
         repositories {
-            if (project.hasProperty("sonatype.username") && project.hasProperty("sonatype.password")) {
+            if (project.hasProperty("sonatypeUsername") && project.hasProperty("sonatypePassword")) {
                 maven {
                     name = "sonatype"
                     url = version.contains("-SNAPSHOT") ? "https://s01.oss.sonatype.org/content/repositories/snapshots" : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
                     credentials {
-                        username project.property("sonatype.username")
-                        password project.property("sonatype.password")
+                        username project.property("sonatypeUsername")
+                        password project.property("sonatypePassword")
                     }
                 }
             }
@@ -76,6 +76,10 @@ subprojects {
     }
 
     signing {
+        if (project.hasProperty("signingKey") && project.hasProperty("signingPassword")) {
+            useInMemoryPgpKeys(project.property("signingKey"), project.property("signingPassword"))
+        }
+
         sign publishing.publications
     }
 
