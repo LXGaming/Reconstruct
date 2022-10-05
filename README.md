@@ -1,6 +1,6 @@
 # Reconstruct
 
-[![License](https://img.shields.io/github/license/LXGaming/Reconstruct?label=License&cacheSeconds=86400)](https://github.com/LXGaming/Reconstruct/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/LXGaming/Reconstruct?label=License&cacheSeconds=86400)](https://github.com/LXGaming/Reconstruct/blob/main/LICENSE)
 ![Maven Central](https://img.shields.io/maven-central/v/io.github.lxgaming/reconstruct-common?label=Maven%20Central)
 
 ## Usage
@@ -21,4 +21,4 @@ Repository: `mavenCentral()`
 Dependency: `io.github.lxgaming:reconstruct-common:VERSION`
 
 ## License
-Reconstruct is licensed under the [Apache 2.0](https://github.com/LXGaming/Reconstruct/blob/master/LICENSE) license.
+Reconstruct is licensed under the [Apache 2.0](https://github.com/LXGaming/Reconstruct/blob/main/LICENSE) license.
