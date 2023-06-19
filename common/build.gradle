@@ -24,10 +24,10 @@ repositories {
 }
 
 dependencies {
-    api("io.github.lxgaming:common:1.2.8")
+    api("io.github.lxgaming:common:1.2.9")
     compileOnly("net.sf.proguard:proguard-base:6.2.2")
-    api("org.slf4j:slf4j-api:2.0.6")
-    api("org.ow2.asm:asm-commons:9.4")
+    api("org.slf4j:slf4j-api:2.0.7")
+    api("org.ow2.asm:asm-commons:9.5")
 }
 
 jar {
