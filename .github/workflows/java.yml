@@ -12,6 +12,8 @@ jobs:
   java:
     name: Java
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         shell: bash {0}
