@@ -20,16 +20,16 @@ import io.github.lxgaming.reconstruct.common.entity.Transform;
 import io.github.lxgaming.reconstruct.common.transformer.Transformer;
 
 public class RenameTransformer extends Transformer {
-    
+
     public RenameTransformer() {
         addAlias("rename");
     }
-    
+
     @Override
     public boolean prepare() {
         return true;
     }
-    
+
     @Override
     public void execute(Transform transform) throws Exception {
         ClassVisitorImpl classVisitor = new ClassVisitorImpl(transform.getClassVisitor(), transform.getClassName());

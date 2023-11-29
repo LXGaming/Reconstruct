@@ -27,74 +27,74 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadFactory;
 
 public class Toolbox {
-    
+
     private static final Scanner SCANNER = new Scanner(System.in);
-    
+
     public static Optional<String> readline() {
         return readline("> ");
     }
-    
+
     public static Optional<String> readline(String prompt) {
         try {
             System.out.print(prompt);
             if (SCANNER.hasNextLine()) {
                 return Optional.ofNullable(SCANNER.nextLine());
             }
-            
+
             return Optional.empty();
         } catch (NoSuchElementException ex) {
             return Optional.empty();
         }
     }
-    
+
     public static <T> T getFirst(List<T> list) {
         if (!list.isEmpty()) {
             T t = list.remove(0);
             if (!list.isEmpty()) {
                 Reconstruct.getInstance().getLogger().trace("Multiple {} found", t.getClass().getSimpleName());
             }
-            
+
             return t;
         }
-        
+
         return null;
     }
-    
+
     public static String getClassDescriptor(String string) {
         if (string.endsWith("[]")) {
             return "[" + getClassDescriptor(string.substring(0, string.length() - 2));
         }
-        
+
         StringBuilder stringBuilder = new StringBuilder();
         appendClassDescriptor(stringBuilder, string);
         return stringBuilder.toString();
     }
-    
+
     public static String getConstructorDescriptor(String name, String[] parameters) {
         StringBuilder stringBuilder = new StringBuilder(name);
         for (String parameter : parameters) {
             stringBuilder.append(parameter);
         }
-        
+
         return stringBuilder.toString();
     }
-    
+
     public static String getFieldDescriptor(String name, String type) {
         return name + ":" + type;
     }
-    
+
     public static String getMethodDescriptor(String name, String[] parameters, String returnType) {
         StringBuilder stringBuilder = new StringBuilder(name);
         stringBuilder.append("(");
         for (String parameter : parameters) {
             stringBuilder.append(parameter);
         }
-        
+
         stringBuilder.append(")");
         stringBuilder.append(returnType);
         return stringBuilder.toString();
     }
-    
+
     private static void appendClassDescriptor(StringBuilder stringBuilder, String name) {
         if (name.equals("boolean")) {
             stringBuilder.append("Z");
@@ -118,40 +118,40 @@ public class Toolbox {
             stringBuilder.append("L").append(toJvmName(name)).append(";");
         }
     }
-    
+
     public static int countArguments(Type type) {
         int count = 0;
         for (Type argumentType : type.getArgumentTypes()) {
             count += argumentType.getSize();
         }
-        
+
         return count;
     }
-    
+
     public static String fromFileName(String name) {
         return toJavaName(name.substring(0, name.lastIndexOf('.')));
     }
-    
+
     public static String toFileName(String name) {
         return toJvmName(name) + ".class";
     }
-    
+
     public static String toJavaName(String name) {
         return name.replace('/', '.');
     }
-    
+
     public static String toJvmName(String name) {
         return name.replace('.', '/');
     }
-    
+
     public static String getClassSimpleName(Class<?> type) {
         if (type.getEnclosingClass() != null) {
             return getClassSimpleName(type.getEnclosingClass()) + "." + type.getSimpleName();
         }
-        
+
         return type.getSimpleName();
     }
-    
+
     public static ThreadFactory newThreadFactory(String format) {
         return BasicThreadFactory.builder().daemon(true).format(format).priority(Thread.NORM_PRIORITY).build();
     }

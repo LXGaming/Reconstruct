@@ -27,35 +27,35 @@ import org.objectweb.asm.ClassWriter;
 import java.util.function.Consumer;
 
 public class TransformTask extends Task {
-    
+
     private final WriteTask writeTask;
     private final String name;
     private final byte[] bytes;
     private final Consumer<Task> consumer;
-    
+
     public TransformTask(WriteTask writeTask, String name, byte[] bytes, Consumer<Task> consumer) {
         this.writeTask = writeTask;
         this.name = name;
         this.bytes = bytes;
         this.consumer = consumer;
     }
-    
+
     @Override
     public boolean prepare() {
         type(Type.DEFAULT);
         return true;
     }
-    
+
     @Override
     public void execute() {
         try {
             ClassReader classReader = new ClassReader(bytes);
             ClassWriter classWriter = new ClassWriter(classReader, 0);
-            
+
             Transform transform = new Transform();
             transform.setClassName(name);
             transform.setClassVisitor(classWriter);
-            
+
             if (TransformerManager.execute(transform)) {
                 classReader.accept(transform.getClassVisitor(), 0);
                 Reconstruct.getInstance().getLogger().debug("Transformed {} -> {}", name, transform.getClassName());
@@ -63,7 +63,7 @@ public class TransformTask extends Task {
             } else {
                 writeTask.queue(Toolbox.toFileName(name), bytes);
             }
-            
+
             consumer.accept(this);
         } catch (Exception ex) {
             Reconstruct.getInstance().getLogger().error("Encountered an error while transforming {}", name, ex);

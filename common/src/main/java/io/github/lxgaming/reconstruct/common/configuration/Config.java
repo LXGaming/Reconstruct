@@ -20,28 +20,28 @@ import java.nio.file.Path;
 import java.util.Collection;
 
 public interface Config {
-    
+
     boolean isDebug();
-    
+
     boolean isTrace();
-    
+
     int getThreads();
-    
+
     void setThreads(int threads);
-    
+
     Collection<String> getTransformers();
-    
+
     Path getInputPath();
-    
+
     void setInputPath(Path inputPath);
-    
+
     Path getMappingPath();
-    
+
     void setMappingPath(Path mappingPath);
-    
+
     Path getOutputPath();
-    
+
     void setOutputPath(Path outputPath);
-    
+
     Collection<String> getExcludedPackages();
 }

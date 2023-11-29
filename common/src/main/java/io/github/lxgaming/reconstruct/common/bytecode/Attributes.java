@@ -20,24 +20,24 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface Attributes {
-    
+
     Attribute.Key<Integer> BEHAVIOR_FIRST_LINE_NUMBER = Attribute.Key.of("behavior_first_line_number", Integer.class);
     Attribute.Key<Integer> BEHAVIOR_LAST_LINE_NUMBER = Attribute.Key.of("behavior_last_line_number", Integer.class);
     Attribute.Key<String> OBFUSCATED_DESCRIPTOR = Attribute.Key.of("obfuscated_descriptor", String.class);
     Attribute.Key<String> OBFUSCATED_NAME = Attribute.Key.of("obfuscated_name", String.class);
-    
+
     Set<Attribute> getAttributes();
-    
+
     default <T> Optional<T> getAttribute(Attribute.Key<T> key) {
         for (Attribute attribute : getAttributes()) {
             if (attribute.getKey().equals(key)) {
                 return Optional.ofNullable(key.getType().cast(attribute.getValue()));
             }
         }
-        
+
         return Optional.empty();
     }
-    
+
     default <T> boolean setAttribute(Attribute.Key<T> key, T value) {
         for (Attribute attribute : getAttributes()) {
             if (attribute.getKey().equals(key)) {
@@ -45,7 +45,7 @@ public interface Attributes {
                 return true;
             }
         }
-        
+
         return getAttributes().add(new Attribute(key, value));
     }
 }

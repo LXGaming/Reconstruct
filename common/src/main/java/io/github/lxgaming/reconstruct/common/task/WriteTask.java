@@ -38,37 +38,37 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class WriteTask extends Task {
-    
+
     private final Path path;
     private final Set<String> paths;
     private final BlockingQueue<ByteArrayZipEntry> queue;
     private final AtomicBoolean state;
-    
+
     public WriteTask(Path path) {
         this.path = path;
         this.paths = new HashSet<>();
         this.queue = new LinkedBlockingQueue<>(250);
         this.state = new AtomicBoolean(false);
     }
-    
+
     @Override
     public boolean prepare() {
         type(Type.DEFAULT);
         getState().set(true);
         return true;
     }
-    
+
     @Override
     public void execute() throws Exception {
         try (JarOutputStream outputStream = new JarOutputStream(new FileOutputStream(path.toFile()))) {
             outputStream.setMethod(ZipEntry.DEFLATED);
-            
+
             while (!queue.isEmpty() || getState().get()) {
                 ByteArrayZipEntry zipEntry = queue.poll(1L, TimeUnit.MILLISECONDS);
                 if (zipEntry == null) {
                     continue;
                 }
-                
+
                 int index = 0;
                 while ((index = zipEntry.getName().indexOf('/', index)) != -1) {
                     String name = zipEntry.getName().substring(0, ++index);
@@ -77,14 +77,14 @@ public class WriteTask extends Task {
                         outputStream.closeEntry();
                     }
                 }
-                
+
                 writeZipEntry(zipEntry, outputStream);
             }
         } catch (Exception ex) {
             Reconstruct.getInstance().getLogger().error("Encountered an error while writing to {}", path, ex);
         }
     }
-    
+
     private void writeZipEntry(ByteArrayZipEntry zipEntry, ZipOutputStream outputStream) throws Exception {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(zipEntry.getBytes())) {
             outputStream.putNextEntry(zipEntry);
@@ -92,25 +92,25 @@ public class WriteTask extends Task {
             outputStream.closeEntry();
         }
     }
-    
+
     public void queue(ZipEntry zipEntry, InputStream inputStream) throws InterruptedException, IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         IOUtils.transferBytes(inputStream, outputStream);
         queue(zipEntry, outputStream.toByteArray());
     }
-    
+
     public void queue(ZipEntry zipEntry, byte[] bytes) throws InterruptedException {
         queue(new ByteArrayZipEntry(zipEntry, bytes));
     }
-    
+
     public void queue(String string, byte[] bytes) throws InterruptedException {
         queue(new ByteArrayZipEntry(string, bytes));
     }
-    
+
     public void queue(ByteArrayZipEntry zipEntry) throws InterruptedException {
         queue.put(zipEntry);
     }
-    
+
     public AtomicBoolean getState() {
         return state;
     }

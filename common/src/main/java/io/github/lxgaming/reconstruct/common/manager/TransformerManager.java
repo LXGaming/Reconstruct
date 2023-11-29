@@ -31,16 +31,16 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public final class TransformerManager {
-    
+
     private static final Set<Transformer> TRANSFORMERS = new LinkedHashSet<>();
     private static final Set<Class<? extends Transformer>> TRANSFORMER_CLASSES = new HashSet<>();
-    
+
     public static void prepare() {
         registerTransformer(MinecraftTransformer.class);
         registerTransformer(ProGuardTransformer.class);
         registerTransformer(RenameTransformer.class);
     }
-    
+
     public static boolean execute(Transform transform) {
         String className = transform.getClassName();
         for (Transformer transformer : TRANSFORMERS) {
@@ -51,29 +51,29 @@ public final class TransformerManager {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     public static boolean registerAlias(Transformer transformer, String alias) {
         if (StringUtils.containsIgnoreCase(transformer.getAliases(), alias)) {
             Reconstruct.getInstance().getLogger().warn("{} is already registered for {}", alias, Toolbox.getClassSimpleName(transformer.getClass()));
             return false;
         }
-        
+
         transformer.getAliases().add(alias);
         Reconstruct.getInstance().getLogger().debug("{} registered for {}", alias, Toolbox.getClassSimpleName(transformer.getClass()));
         return true;
     }
-    
+
     public static boolean registerTransformer(Class<? extends Transformer> transformerClass) {
         if (TRANSFORMER_CLASSES.contains(transformerClass)) {
             Reconstruct.getInstance().getLogger().warn("{} is already registered", Toolbox.getClassSimpleName(transformerClass));
             return false;
         }
-        
+
         TRANSFORMER_CLASSES.add(transformerClass);
-        
+
         Transformer transformer;
         try {
             transformer = transformerClass.newInstance();
@@ -81,11 +81,11 @@ public final class TransformerManager {
             Reconstruct.getInstance().getLogger().error("Encountered an error while initializing {}", Toolbox.getClassSimpleName(transformerClass), ex);
             return false;
         }
-        
+
         if (!shouldRegister(transformer)) {
             return false;
         }
-        
+
         try {
             if (!transformer.prepare()) {
                 Reconstruct.getInstance().getLogger().warn("{} failed to prepare", Toolbox.getClassSimpleName(transformerClass));
@@ -95,23 +95,23 @@ public final class TransformerManager {
             Reconstruct.getInstance().getLogger().error("Encountered an error while preparing {}", Toolbox.getClassSimpleName(transformerClass), ex);
             return false;
         }
-        
+
         TRANSFORMERS.add(transformer);
         Reconstruct.getInstance().getLogger().debug("{} registered", Toolbox.getClassSimpleName(transformerClass));
         return true;
     }
-    
+
     public static boolean shouldRegister(Transformer transformer) {
         Collection<String> aliases = transformer.getAliases();
         if (aliases == null || aliases.isEmpty()) {
             return true;
         }
-        
+
         Collection<String> transformers = Reconstruct.getInstance().getConfig().getTransformers();
         if (transformers == null || transformers.isEmpty()) {
             return true;
         }
-        
+
         return StringUtils.containsIgnoreCase(transformers, aliases);
     }
 }

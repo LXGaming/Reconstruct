@@ -19,22 +19,22 @@ package io.github.lxgaming.reconstruct.common.entity;
 import org.objectweb.asm.ClassVisitor;
 
 public class Transform {
-    
+
     private String className;
     private ClassVisitor classVisitor;
-    
+
     public String getClassName() {
         return className;
     }
-    
+
     public void setClassName(String className) {
         this.className = className;
     }
-    
+
     public ClassVisitor getClassVisitor() {
         return classVisitor;
     }
-    
+
     public void setClassVisitor(ClassVisitor classVisitor) {
         this.classVisitor = classVisitor;
     }

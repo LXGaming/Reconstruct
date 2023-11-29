@@ -34,20 +34,20 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class RemapperImpl extends Remapper {
-    
+
     private final Set<RcClass> cachedClasses;
-    
+
     public RemapperImpl() {
         this.cachedClasses = new HashSet<>();
     }
-    
+
     @Override
     public Object mapValue(Object value) {
         if (value instanceof Handle) {
             // https://gitlab.ow2.org/asm/asm/-/merge_requests/327
             Handle handle = (Handle) value;
             boolean isFieldHandle = handle.getTag() <= Opcodes.H_PUTSTATIC;
-            
+
             return new Handle(
                     handle.getTag(),
                     mapType(handle.getOwner()),
@@ -57,68 +57,68 @@ public class RemapperImpl extends Remapper {
                     isFieldHandle ? mapDesc(handle.getDesc()) : mapMethodDesc(handle.getDesc()),
                     handle.isInterface());
         }
-        
+
         return super.mapValue(value);
     }
-    
+
     @Override
     public String mapMethodName(String owner, String name, String descriptor) {
         RcClass currentClass = getClass(Toolbox.toJavaName(owner), Attributes.OBFUSCATED_NAME);
         if (currentClass == null) {
             return name;
         }
-        
+
         RcMethod currentMethod = getMethod(currentClass, name + descriptor, Attributes.OBFUSCATED_DESCRIPTOR);
         if (currentMethod == null) {
             return name;
         }
-        
+
         Reconstruct.getInstance().getLogger().trace("Method {}.{}{} -> {}.{}{}", owner, name, descriptor, owner, currentMethod.getName(), descriptor);
         return currentMethod.getName();
     }
-    
+
     @Override
     public String mapFieldName(String owner, String name, String descriptor) {
         RcClass currentClass = getClass(Toolbox.toJavaName(owner), Attributes.OBFUSCATED_NAME);
         if (currentClass == null) {
             return name;
         }
-        
+
         RcField currentField = getField(currentClass, name + ":" + descriptor, Attributes.OBFUSCATED_DESCRIPTOR);
         if (currentField == null) {
             return name;
         }
-        
+
         Reconstruct.getInstance().getLogger().trace("Field {}.{}:{} -> {}.{}:{}", owner, name, descriptor, owner, currentField.getName(), descriptor);
         return currentField.getName();
     }
-    
+
     @Override
     public String map(String internalName) {
         RcClass currentClass = getClass(Toolbox.toJavaName(internalName), Attributes.OBFUSCATED_NAME);
         if (currentClass == null) {
             return internalName;
         }
-        
+
         return Toolbox.toJvmName(currentClass.getName());
     }
-    
+
     public RcClass getClass(String name, Attribute.Key<String> attribute) {
         RcClass cachedClass = getCachedClass(rcClass -> rcClass.getAttribute(attribute).map(name::equals).orElse(false));
         if (cachedClass != null) {
             return cachedClass;
         }
-        
+
         RcClass currentClass = Reconstruct.getInstance().getClass(name, attribute).orElse(null);
         if (currentClass != null) {
             cachedClasses.add(currentClass);
             Reconstruct.getInstance().getLogger().trace("Class {} -> {}", name, currentClass.getName());
             return currentClass;
         }
-        
+
         return null;
     }
-    
+
     private RcField getField(RcClass rcClass, String descriptor, Attribute.Key<String> attribute) {
         return rcClass.getField(field -> {
             return field.getAttribute(attribute).map(alternativeDescriptor -> {
@@ -126,7 +126,7 @@ public class RemapperImpl extends Remapper {
             }).orElse(false);
         });
     }
-    
+
     private RcMethod getMethod(RcClass rcClass, String descriptor, Attribute.Key<String> attribute) {
         return rcClass.getMethod(method -> {
             return method.getAttribute(attribute).map(alternativeDescriptor -> {
@@ -134,11 +134,11 @@ public class RemapperImpl extends Remapper {
             }).orElse(false);
         });
     }
-    
+
     private RcClass getCachedClass(Predicate<RcClass> predicate) {
         return Toolbox.getFirst(getCachedClasses(predicate));
     }
-    
+
     private List<RcClass> getCachedClasses(Predicate<RcClass> predicate) {
         List<RcClass> classes = new ArrayList<>();
         for (RcClass rcClass : this.cachedClasses) {
@@ -146,7 +146,7 @@ public class RemapperImpl extends Remapper {
                 classes.add(rcClass);
             }
         }
-        
+
         return classes;
     }
 }

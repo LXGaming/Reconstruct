@@ -21,22 +21,22 @@ import io.github.lxgaming.reconstruct.common.util.HashUtils;
 import java.util.zip.ZipEntry;
 
 public class ByteArrayZipEntry extends ZipEntry {
-    
+
     private final byte[] bytes;
-    
+
     public ByteArrayZipEntry(ZipEntry zipEntry, byte[] bytes) {
         this(zipEntry.getName(), bytes);
     }
-    
+
     public ByteArrayZipEntry(String name, byte[] bytes) {
         super(name);
         this.bytes = bytes;
-        
+
         // Required for STORED
         setCrc(HashUtils.crc(bytes));
         setSize(bytes.length);
     }
-    
+
     public byte[] getBytes() {
         return bytes;
     }

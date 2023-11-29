@@ -24,14 +24,14 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
 public class ClassVisitorImpl extends ClassVisitor {
-    
+
     private final String className;
-    
+
     public ClassVisitorImpl(ClassVisitor classVisitor, String className) {
         super(Opcodes.ASM9, classVisitor);
         this.className = className;
     }
-    
+
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         MethodVisitor methodVisitor;
@@ -41,11 +41,11 @@ public class ClassVisitorImpl extends ClassVisitor {
             Reconstruct.getInstance().getLogger().error("Encountered an error while renaming {}.{}{} ({})", className, name, descriptor, signature, ex);
             return null;
         }
-        
+
         if (methodVisitor == null) {
             return null;
         }
-        
+
         int arguments = Toolbox.countArguments(Type.getMethodType(descriptor));
         return new MethodVisitorImpl(
                 methodVisitor,

@@ -19,27 +19,27 @@ package io.github.lxgaming.reconstruct.common.bytecode;
 import java.util.Optional;
 
 public final class RcArray extends RcClass {
-    
+
     private RcClass type;
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public <T> Optional<T> getAttribute(Attribute.Key<T> key) {
         if (key == Attributes.OBFUSCATED_DESCRIPTOR) {
             return (Optional<T>) getType().getAttribute(key).map(value -> "[" + value);
         }
-        
+
         if (key == Attributes.OBFUSCATED_NAME) {
             return (Optional<T>) getType().getAttribute(key).map(value -> value + "[]");
         }
-        
+
         return getType().getAttribute(key);
     }
-    
+
     public RcClass getType() {
         return type;
     }
-    
+
     public void setType(RcClass type) {
         this.type = type;
     }

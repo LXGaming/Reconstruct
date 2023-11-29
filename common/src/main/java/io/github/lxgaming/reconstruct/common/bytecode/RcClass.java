@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class RcClass implements Attributes {
-    
+
     private final Set<Attribute> attributes;
     private final Set<RcClass> classes;
     private final Set<RcConstructor> constructors;
@@ -36,7 +36,7 @@ public class RcClass implements Attributes {
     private String name;
     private String descriptor;
     private int modifiers;
-    
+
     public RcClass() {
         this.attributes = new HashSet<>();
         this.classes = new LinkedHashSet<>();
@@ -44,22 +44,22 @@ public class RcClass implements Attributes {
         this.fields = new LinkedHashSet<>();
         this.methods = new LinkedHashSet<>();
     }
-    
+
     public void update() {
         setDescriptor(Toolbox.getClassDescriptor(getName()));
         getAttribute(Attributes.OBFUSCATED_NAME).map(Toolbox::getClassDescriptor).ifPresent(descriptor -> {
             setAttribute(Attributes.OBFUSCATED_DESCRIPTOR, descriptor);
         });
     }
-    
+
     public RcClass getSuperClass() {
         return Toolbox.getFirst(getClasses(rcClass -> true));
     }
-    
+
     public List<RcClass> getInterfaces() {
         return getClasses(rcClass -> Modifier.isInterface(rcClass.getModifiers()));
     }
-    
+
     public List<RcClass> getClasses(Predicate<RcClass> predicate) {
         List<RcClass> classes = new ArrayList<>();
         for (RcClass rcClass : this.classes) {
@@ -67,28 +67,28 @@ public class RcClass implements Attributes {
                 classes.add(rcClass);
             }
         }
-        
+
         return classes;
     }
-    
+
     public RcConstructor getDeclaredConstructor(Predicate<RcConstructor> predicate) {
         return Toolbox.getFirst(getConstructors(predicate));
     }
-    
+
     public RcConstructor getConstructor(Predicate<RcConstructor> predicate) {
         RcConstructor constructor = getDeclaredConstructor(predicate);
         if (constructor != null) {
             return constructor;
         }
-        
+
         RcClass parentClass = getSuperClass();
         if (parentClass != null) {
             return parentClass.getConstructor(predicate);
         }
-        
+
         return null;
     }
-    
+
     public List<RcConstructor> getConstructors(Predicate<RcConstructor> predicate) {
         List<RcConstructor> constructors = new ArrayList<>();
         for (RcConstructor constructor : this.constructors) {
@@ -96,30 +96,30 @@ public class RcClass implements Attributes {
                 constructors.add(constructor);
             }
         }
-        
+
         return constructors;
     }
-    
+
     public RcField getDeclaredField(Predicate<RcField> predicate) {
         return Toolbox.getFirst(getFields(predicate));
     }
-    
+
     public RcField getField(Predicate<RcField> predicate) {
         RcField field = getDeclaredField(predicate);
         if (field != null) {
             return field;
         }
-        
+
         for (RcClass rcClass : getClasses()) {
             RcField parentField = rcClass.getField(predicate);
             if (parentField != null) {
                 return parentField;
             }
         }
-        
+
         return null;
     }
-    
+
     public List<RcField> getFields(Predicate<RcField> predicate) {
         List<RcField> fields = new ArrayList<>();
         for (RcField field : this.fields) {
@@ -127,30 +127,30 @@ public class RcClass implements Attributes {
                 fields.add(field);
             }
         }
-        
+
         return fields;
     }
-    
+
     public RcMethod getDeclaredMethod(Predicate<RcMethod> predicate) {
         return Toolbox.getFirst(getMethods(predicate));
     }
-    
+
     public RcMethod getMethod(Predicate<RcMethod> predicate) {
         RcMethod method = getDeclaredMethod(predicate);
         if (method != null) {
             return method;
         }
-        
+
         for (RcClass rcClass : getClasses()) {
             RcMethod parentMethod = rcClass.getMethod(predicate);
             if (parentMethod != null) {
                 return parentMethod;
             }
         }
-        
+
         return null;
     }
-    
+
     public List<RcMethod> getMethods(Predicate<RcMethod> predicate) {
         List<RcMethod> methods = new ArrayList<>();
         for (RcMethod method : this.methods) {
@@ -158,69 +158,69 @@ public class RcClass implements Attributes {
                 methods.add(method);
             }
         }
-        
+
         return methods;
     }
-    
+
     @Override
     public Set<Attribute> getAttributes() {
         return attributes;
     }
-    
+
     public Set<RcClass> getClasses() {
         return classes;
     }
-    
+
     public Set<RcConstructor> getConstructors() {
         return constructors;
     }
-    
+
     public Set<RcField> getFields() {
         return fields;
     }
-    
+
     public Set<RcMethod> getMethods() {
         return methods;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getDescriptor() {
         return descriptor;
     }
-    
+
     protected void setDescriptor(String descriptor) {
         this.descriptor = descriptor;
     }
-    
+
     public int getModifiers() {
         return modifiers;
     }
-    
+
     public void setModifiers(int modifiers) {
         this.modifiers = modifiers;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        
+
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        
+
         RcClass rcClass = (RcClass) obj;
         return Objects.equals(getName(), rcClass.getName());
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(getName());

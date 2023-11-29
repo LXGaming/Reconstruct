@@ -21,11 +21,11 @@ import com.beust.jcommander.converters.PathConverter;
 import java.nio.file.Path;
 
 public class AbsolutePathConverter extends PathConverter {
-    
+
     public AbsolutePathConverter(String optionName) {
         super(optionName);
     }
-    
+
     @Override
     public Path convert(String value) {
         return super.convert(value).toAbsolutePath();

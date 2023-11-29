@@ -25,9 +25,9 @@ import io.github.lxgaming.reconstruct.common.bytecode.RcMethod;
 import proguard.obfuscate.MappingProcessor;
 
 public class MappingProcessorImpl implements MappingProcessor {
-    
+
     private RcClass currentClass;
-    
+
     @Override
     public boolean processClassMapping(String className, String newClassName) {
         currentClass = Reconstruct.getInstance().getOrCreateClass(className);
@@ -35,20 +35,20 @@ public class MappingProcessorImpl implements MappingProcessor {
         currentClass.update();
         return true;
     }
-    
+
     @Override
     public void processFieldMapping(String className, String fieldType, String fieldName, String newClassName, String newFieldName) {
         if (currentClass == null) {
             return;
         }
-        
+
         if (!className.equals(newClassName)) {
             Reconstruct.getInstance().getLogger().warn("Field {} has an explicit original class name. As this is not supported {} will be used instead of {}", fieldName, newClassName, className);
         }
-        
+
         RcField field = new RcField();
         field.setName(fieldName);
-        
+
         RcClass type = Reconstruct.getInstance().getOrCreateClass(fieldType);
         field.setType(type);
         field.setAttribute(Attributes.OBFUSCATED_NAME, newFieldName);
@@ -56,7 +56,7 @@ public class MappingProcessorImpl implements MappingProcessor {
             Reconstruct.getInstance().getLogger().warn("Duplicate field {} for class {}", field.getName(), currentClass.getName());
         }
     }
-    
+
     @Override
     public void processMethodMapping(String className, int firstLineNumber, int lastLineNumber, String methodReturnType,
                                      String methodName, String methodArguments, String newClassName, int newFirstLineNumber,
@@ -64,11 +64,11 @@ public class MappingProcessorImpl implements MappingProcessor {
         if (currentClass == null) {
             return;
         }
-        
+
         if (!className.equals(newClassName)) {
             Reconstruct.getInstance().getLogger().warn("Method {} has an explicit original class name. As this is not supported {} will be used instead of {}", methodName, newClassName, className);
         }
-        
+
         if (methodName.equals(RcConstructor.CONSTRUCTOR_NAME) || methodName.equals(RcConstructor.STATIC_INITIALIZER_NAME)) {
             RcConstructor constructor = new RcConstructor();
             constructor.setName(methodName);
@@ -78,7 +78,7 @@ public class MappingProcessorImpl implements MappingProcessor {
                     constructor.getParameters().add(parameter);
                 }
             }
-            
+
             constructor.setAttribute(Attributes.OBFUSCATED_NAME, newMethodName);
             constructor.setAttribute(Attributes.BEHAVIOR_FIRST_LINE_NUMBER, firstLineNumber);
             constructor.setAttribute(Attributes.BEHAVIOR_LAST_LINE_NUMBER, lastLineNumber);
@@ -94,7 +94,7 @@ public class MappingProcessorImpl implements MappingProcessor {
                     method.getParameters().add(parameter);
                 }
             }
-            
+
             RcClass returnType = Reconstruct.getInstance().getOrCreateClass(methodReturnType);
             method.setReturnType(returnType);
             method.setAttribute(Attributes.OBFUSCATED_NAME, newMethodName);

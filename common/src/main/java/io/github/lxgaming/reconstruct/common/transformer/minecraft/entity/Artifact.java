@@ -17,25 +17,25 @@
 package io.github.lxgaming.reconstruct.common.transformer.minecraft.entity;
 
 public class Artifact {
-    
+
     private final String id;
     private final String path;
     private final String hash;
-    
+
     public Artifact(String id, String path, String hash) {
         this.id = id;
         this.path = path;
         this.hash = hash;
     }
-    
+
     public String getId() {
         return id;
     }
-    
+
     public String getPath() {
         return path;
     }
-    
+
     public String getHash() {
         return hash;
     }

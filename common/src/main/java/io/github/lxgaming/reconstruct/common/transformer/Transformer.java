@@ -23,17 +23,17 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public abstract class Transformer {
-    
+
     private final Set<String> aliases = new LinkedHashSet<>();
-    
+
     public abstract boolean prepare();
-    
+
     public abstract void execute(Transform transform) throws Exception;
-    
+
     protected final void addAlias(String alias) {
         TransformerManager.registerAlias(this, alias);
     }
-    
+
     public final Set<String> getAliases() {
         return aliases;
     }

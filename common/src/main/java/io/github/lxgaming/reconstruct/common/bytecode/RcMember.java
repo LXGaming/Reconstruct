@@ -20,32 +20,32 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class RcMember implements Attributes {
-    
+
     private final Set<Attribute> attributes;
     private String name;
     private String descriptor;
-    
+
     RcMember() {
         this.attributes = new HashSet<>();
     }
-    
+
     @Override
     public Set<Attribute> getAttributes() {
         return attributes;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getDescriptor() {
         return descriptor;
     }
-    
+
     protected void setDescriptor(String descriptor) {
         this.descriptor = descriptor;
     }

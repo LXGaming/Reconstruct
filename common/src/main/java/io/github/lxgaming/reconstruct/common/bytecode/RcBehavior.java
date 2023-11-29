@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class RcBehavior extends RcMember {
-    
+
     private final List<RcClass> parameters;
-    
+
     RcBehavior() {
         this.parameters = new ArrayList<>();
     }
-    
+
     public List<RcClass> getParameters(Predicate<RcClass> predicate) {
         List<RcClass> parameters = new ArrayList<>();
         for (RcClass parameter : this.parameters) {
@@ -35,10 +35,10 @@ public abstract class RcBehavior extends RcMember {
                 parameters.add(parameter);
             }
         }
-        
+
         return parameters;
     }
-    
+
     public List<RcClass> getParameters() {
         return parameters;
     }

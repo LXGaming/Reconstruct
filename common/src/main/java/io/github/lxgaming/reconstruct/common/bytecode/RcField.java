@@ -21,9 +21,9 @@ import io.github.lxgaming.reconstruct.common.util.Toolbox;
 import java.util.Objects;
 
 public final class RcField extends RcMember {
-    
+
     private RcClass type;
-    
+
     public void update() {
         setDescriptor(Toolbox.getFieldDescriptor(getName(), getType().getDescriptor()));
         getAttribute(Attributes.OBFUSCATED_NAME).map(obfuscatedName -> {
@@ -32,30 +32,30 @@ public final class RcField extends RcMember {
             setAttribute(Attributes.OBFUSCATED_DESCRIPTOR, descriptor);
         });
     }
-    
+
     public RcClass getType() {
         return type;
     }
-    
+
     public void setType(RcClass type) {
         this.type = type;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        
+
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        
+
         RcField rcField = (RcField) obj;
         return Objects.equals(getName(), rcField.getName())
                 && Objects.deepEquals(getType(), rcField.getType());
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(getName(), getType());

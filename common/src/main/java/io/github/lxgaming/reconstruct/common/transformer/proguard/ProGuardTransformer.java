@@ -32,28 +32,28 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ProGuardTransformer extends Transformer {
-    
+
     public ProGuardTransformer() {
         addAlias("proguard");
     }
-    
+
     @Override
     public boolean prepare() {
         Path path = Reconstruct.getInstance().getConfig().getMappingPath();
         if (path == null) {
             return false;
         }
-        
+
         if (!Files.isRegularFile(path)) {
             Reconstruct.getInstance().getLogger().error("Provided path is not a file");
             return false;
         }
-        
+
         try {
             Reconstruct.getInstance().getLogger().info("Parsing mappings...");
             MappingReader mappingReader = new MappingReader(path.toFile());
             mappingReader.pump(new MappingProcessorImpl());
-            
+
             int constructors = 0;
             int fields = 0;
             int methods = 0;
@@ -62,18 +62,18 @@ public class ProGuardTransformer extends Transformer {
                     constructor.update();
                     constructors++;
                 }
-                
+
                 for (RcField field : currentClass.getFields()) {
                     field.update();
                     fields++;
                 }
-                
+
                 for (RcMethod method : currentClass.getMethods()) {
                     method.update();
                     methods++;
                 }
             }
-            
+
             Reconstruct.getInstance().getLogger().info("Mapped:");
             Reconstruct.getInstance().getLogger().info(" - {} Classes", Reconstruct.getInstance().getClasses().size());
             Reconstruct.getInstance().getLogger().info(" - {} Constructors", constructors);
@@ -85,7 +85,7 @@ public class ProGuardTransformer extends Transformer {
             return false;
         }
     }
-    
+
     @Override
     public void execute(Transform transform) throws Exception {
         RemapperImpl remapper = new RemapperImpl();
@@ -93,7 +93,7 @@ public class ProGuardTransformer extends Transformer {
         if (currentClass != null) {
             transform.setClassName(currentClass.getName());
         }
-        
+
         ClassRemapper classRemapper = new ClassRemapper(transform.getClassVisitor(), remapper);
         transform.setClassVisitor(classRemapper);
     }

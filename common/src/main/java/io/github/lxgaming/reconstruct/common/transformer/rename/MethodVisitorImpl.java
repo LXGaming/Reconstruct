@@ -21,17 +21,17 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 public class MethodVisitorImpl extends MethodVisitor {
-    
+
     private final boolean isStatic;
     private final int parameterTotal;
     private int parameterIndex;
-    
+
     public MethodVisitorImpl(MethodVisitor methodVisitor, boolean isStatic, int parameterTotal) {
         super(Opcodes.ASM9, methodVisitor);
         this.isStatic = isStatic;
         this.parameterTotal = parameterTotal;
     }
-    
+
     @Override
     public void visitParameter(String name, int access) {
         if (isValidJavaIdentifier(name)) {
@@ -39,10 +39,10 @@ public class MethodVisitorImpl extends MethodVisitor {
         } else {
             super.visitParameter("param" + parameterIndex, access);
         }
-        
+
         parameterIndex += 1;
     }
-    
+
     @Override
     public void visitLocalVariable(String name, String descriptor, String signature, Label start, Label end, int index) {
         int parameters = isStatic ? parameterTotal : parameterTotal + 1;
@@ -56,22 +56,22 @@ public class MethodVisitorImpl extends MethodVisitor {
             super.visitLocalVariable("var" + index, descriptor, signature, start, end, index);
         }
     }
-    
+
     protected boolean isValidJavaIdentifier(String name) {
         if (name == null || name.isEmpty()) {
             return false;
         }
-        
+
         if (!Character.isJavaIdentifierStart(name.charAt(0))) {
             return false;
         }
-        
+
         for (int index = 0; index < name.length(); index++) {
             if (!Character.isJavaIdentifierPart(name.charAt(index))) {
                 return false;
             }
         }
-        
+
         return true;
     }
 }

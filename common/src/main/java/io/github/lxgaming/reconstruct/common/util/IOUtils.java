@@ -26,15 +26,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class IOUtils {
-    
+
     public static final int DEFAULT_BUFFER_SIZE = 8192;
-    
+
     public static List<String> readAllLines(InputStream inputStream) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             return reader.lines().collect(Collectors.toCollection(ArrayList::new));
         }
     }
-    
+
     public static void transferBytes(InputStream inputStream, OutputStream outputStream) throws IOException {
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         int read;

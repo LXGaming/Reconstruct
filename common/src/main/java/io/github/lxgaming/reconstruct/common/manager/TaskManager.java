@@ -25,13 +25,13 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public final class TaskManager {
-    
+
     public static final ScheduledThreadPoolExecutor SCHEDULED_EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(0, Toolbox.newThreadFactory("Task Thread #%d"));
-    
+
     public static void prepare() {
         SCHEDULED_EXECUTOR_SERVICE.setCorePoolSize(Reconstruct.getInstance().getConfig().getThreads());
     }
-    
+
     public static void schedule(Task task) {
         try {
             if (!task.prepare()) {
@@ -42,18 +42,18 @@ public final class TaskManager {
             Reconstruct.getInstance().getLogger().error("Encountered an error while preparing {}", Toolbox.getClassSimpleName(task.getClass()), ex);
             return;
         }
-        
+
         try {
             task.schedule(SCHEDULED_EXECUTOR_SERVICE);
         } catch (Exception ex) {
             Reconstruct.getInstance().getLogger().error("Encountered an error while scheduling {}", Toolbox.getClassSimpleName(task.getClass()), ex);
         }
     }
-    
+
     public static ScheduledFuture<?> schedule(Runnable runnable) {
         return SCHEDULED_EXECUTOR_SERVICE.schedule(runnable, 0L, TimeUnit.MILLISECONDS);
     }
-    
+
     public static void shutdown() {
         Reconstruct.getInstance().getLogger().debug("Shutting down TaskManager");
         try {
@@ -61,7 +61,7 @@ public final class TaskManager {
             if (!SCHEDULED_EXECUTOR_SERVICE.awaitTermination(15000L, TimeUnit.MILLISECONDS)) {
                 throw new InterruptedException();
             }
-            
+
             Reconstruct.getInstance().getLogger().info("Successfully terminated task, continuing with shutdown process...");
         } catch (Exception ex) {
             Reconstruct.getInstance().getLogger().error("Failed to terminate task, continuing with shutdown process...");

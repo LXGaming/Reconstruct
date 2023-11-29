@@ -25,22 +25,22 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.fusesource.jansi.AnsiConsole;
 
 public class Main {
-    
+
     public static void main(String[] args) {
         Thread.currentThread().setName("Main Thread");
         if (System.getProperty("log4j.skipJansi", "false").equalsIgnoreCase("false")) {
             System.setProperty("log4j.skipJansi", "false");
             AnsiConsole.systemInstall();
         }
-        
+
         Reconstruct reconstruct = new Reconstruct(new ConfigImpl());
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
-        
+
         Reconstruct.getInstance().getLogger().info("{} v{}", Reconstruct.NAME, Reconstruct.VERSION);
         Reconstruct.getInstance().getLogger().info("Authors: {}", Reconstruct.AUTHORS);
         Reconstruct.getInstance().getLogger().info("Source: {}", Reconstruct.SOURCE);
         Reconstruct.getInstance().getLogger().info("Website: {}", Reconstruct.WEBSITE);
-        
+
         try {
             JCommander.newBuilder()
                     .addObject(Reconstruct.getInstance().getConfig())
@@ -51,7 +51,7 @@ public class Main {
             Runtime.getRuntime().exit(-1);
             return;
         }
-        
+
         if (Reconstruct.getInstance().getConfig().isTrace()) {
             System.setProperty("reconstruct.logging.console.level", "TRACE");
             Configurator.reconfigure();
@@ -63,21 +63,21 @@ public class Main {
         } else {
             Reconstruct.getInstance().getLogger().info("Debug mode disabled");
         }
-        
+
         if (!((ConfigImpl) Reconstruct.getInstance().getConfig()).isAgree()) {
             if (System.console() == null && !System.getProperty("java.class.path").contains("idea_rt.jar")) {
                 Reconstruct.getInstance().getLogger().error("Failed to detect Console");
                 return;
             }
-            
+
             Reconstruct.getInstance().getLogger().warn("========================== WARNING ==========================");
             Reconstruct.getInstance().getLogger().warn("  Do not distribute confidential or proprietary information  ");
             Reconstruct.getInstance().getLogger().warn("unless you have explicit permission from the copyright holder");
             Reconstruct.getInstance().getLogger().warn("========================== WARNING ==========================");
-            
+
             Toolbox.readline("Press Enter to continue...");
         }
-        
+
         reconstruct.load();
     }
 }

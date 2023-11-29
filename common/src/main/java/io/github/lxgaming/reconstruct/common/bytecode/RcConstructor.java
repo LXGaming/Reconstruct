@@ -21,10 +21,10 @@ import io.github.lxgaming.reconstruct.common.util.Toolbox;
 import java.util.Objects;
 
 public final class RcConstructor extends RcBehavior {
-    
+
     public static final String CONSTRUCTOR_NAME = "<init>";
     public static final String STATIC_INITIALIZER_NAME = "<clinit>";
-    
+
     public void update() {
         setDescriptor(Toolbox.getConstructorDescriptor(getName(), getParameters().stream().map(RcClass::getDescriptor).toArray(String[]::new)));
         getAttribute(Attributes.OBFUSCATED_NAME).map(obfuscatedName -> {
@@ -35,30 +35,30 @@ public final class RcConstructor extends RcBehavior {
             setAttribute(Attributes.OBFUSCATED_DESCRIPTOR, descriptor);
         });
     }
-    
+
     public boolean isConstructor() {
         return getName() != null && getName().equals(CONSTRUCTOR_NAME);
     }
-    
+
     public boolean isStaticInitializer() {
         return getName() != null && getName().equals(STATIC_INITIALIZER_NAME);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        
+
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        
+
         RcConstructor rcConstructor = (RcConstructor) obj;
         return Objects.equals(getName(), rcConstructor.getName())
                 && Objects.deepEquals(getParameters(), rcConstructor.getParameters());
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(getName(), getParameters());

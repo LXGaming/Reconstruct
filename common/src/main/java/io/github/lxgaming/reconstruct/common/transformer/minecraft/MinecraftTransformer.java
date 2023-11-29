@@ -36,11 +36,11 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 public class MinecraftTransformer extends Transformer {
-    
+
     public MinecraftTransformer() {
         addAlias("minecraft");
     }
-    
+
     @Override
     public boolean prepare() {
         Path inputPath = Reconstruct.getInstance().getConfig().getInputPath();
@@ -49,32 +49,32 @@ public class MinecraftTransformer extends Transformer {
             if (manifest == null) {
                 return true;
             }
-            
+
             String mainClass = manifest.getMainAttributes().getValue(Attributes.Name.MAIN_CLASS);
             if (!mainClass.equals("net.minecraft.bundler.Main")) {
                 return true;
             }
-            
+
             Reconstruct.getInstance().getLogger().info("Minecraft Bundler Detected");
-            
+
             List<Artifact> versions = parseArtifacts(jarFile, "META-INF/versions.list");
             if (versions == null) {
                 return false;
             }
-            
+
             if (versions.isEmpty()) {
                 Reconstruct.getInstance().getLogger().warn("No versions found");
                 return false;
             }
-            
+
             Artifact artifact = versions.get(0);
             Reconstruct.getInstance().getLogger().info("- {} ({})", artifact.getId(), artifact.getHash());
-            
+
             Path extractPath = extract(jarFile, "META-INF/versions/" + artifact.getPath());
             if (extractPath == null) {
                 return false;
             }
-            
+
             Reconstruct.getInstance().getLogger().info("Overriding Input Path {} -> {}", inputPath, extractPath);
             Reconstruct.getInstance().getConfig().setInputPath(extractPath);
             return true;
@@ -83,47 +83,47 @@ public class MinecraftTransformer extends Transformer {
             return false;
         }
     }
-    
+
     @Override
     public void execute(Transform transform) throws Exception {
     }
-    
+
     private List<Artifact> parseArtifacts(JarFile jarFile, String entryName) {
         JarEntry jarEntry = jarFile.getJarEntry(entryName);
         if (jarEntry == null) {
             Reconstruct.getInstance().getLogger().warn("{} does not exist", entryName);
             return null;
         }
-        
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(jarFile.getInputStream(jarEntry)))) {
             List<Artifact> artifacts = new ArrayList<>();
-            
+
             String line;
             if ((line = reader.readLine()) != null) {
                 String[] split = line.split("\t");
                 artifacts.add(new Artifact(split[1], split[2], split[0]));
             }
-            
+
             return artifacts;
         } catch (Exception ex) {
             Reconstruct.getInstance().getLogger().error("Encountered an error while parsing {}", entryName, ex);
             return null;
         }
     }
-    
+
     private Path extract(JarFile jarFile, String entryName) {
         JarEntry jarEntry = jarFile.getJarEntry(entryName);
         if (jarEntry == null) {
             Reconstruct.getInstance().getLogger().warn("{} does not exist", entryName);
             return null;
         }
-        
+
         int index = jarEntry.getName().lastIndexOf('/');
         String name = index != -1 ? jarEntry.getName().substring(index + 1) : entryName;
         Path outputPath = Reconstruct.getInstance().getConfig().getOutputPath().getParent().resolve(name);
-        
+
         Reconstruct.getInstance().getLogger().info("Extracting {} -> {}", entryName, outputPath);
-        
+
         try (InputStream inputStream = jarFile.getInputStream(jarEntry); OutputStream outputStream = Files.newOutputStream(outputPath)) {
             IOUtils.transferBytes(inputStream, outputStream);
             return outputPath;

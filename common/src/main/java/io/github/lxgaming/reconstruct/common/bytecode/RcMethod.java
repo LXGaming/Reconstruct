@@ -21,9 +21,9 @@ import io.github.lxgaming.reconstruct.common.util.Toolbox;
 import java.util.Objects;
 
 public final class RcMethod extends RcBehavior {
-    
+
     private RcClass returnType;
-    
+
     public void update() {
         setDescriptor(Toolbox.getMethodDescriptor(getName(), getParameters().stream().map(RcClass::getDescriptor).toArray(String[]::new), returnType.getDescriptor()));
         getAttribute(Attributes.OBFUSCATED_NAME).map(obfuscatedName -> {
@@ -34,31 +34,31 @@ public final class RcMethod extends RcBehavior {
             setAttribute(Attributes.OBFUSCATED_DESCRIPTOR, descriptor);
         });
     }
-    
+
     public RcClass getReturnType() {
         return returnType;
     }
-    
+
     public void setReturnType(RcClass returnType) {
         this.returnType = returnType;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        
+
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        
+
         RcMethod rcMethod = (RcMethod) obj;
         return Objects.equals(getName(), rcMethod.getName())
                 && Objects.deepEquals(getParameters(), rcMethod.getParameters())
                 && Objects.equals(getReturnType(), rcMethod.getReturnType());
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(getName(), getParameters(), getReturnType());

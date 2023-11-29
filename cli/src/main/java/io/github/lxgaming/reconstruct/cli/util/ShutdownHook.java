@@ -20,7 +20,7 @@ import io.github.lxgaming.reconstruct.common.Reconstruct;
 import org.apache.logging.log4j.LogManager;
 
 public class ShutdownHook extends Thread {
-    
+
     @Override
     public void run() {
         Thread.currentThread().setName("Shutdown Thread");
