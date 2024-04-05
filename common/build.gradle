@@ -9,10 +9,6 @@ targetCompatibility = 1.8
 
 archivesBaseName = "reconstruct-common"
 
-blossom {
-    replaceToken("@version@", version)
-}
-
 configurations {
     [apiElements, runtimeElements].each {
         it.outgoing.artifacts.clear()
@@ -59,5 +55,15 @@ shadowJar {
         }
 
         return false
+    }
+}
+
+sourceSets {
+    main {
+        blossom {
+            javaSources {
+                property("version", version)
+            }
+        }
     }
 }

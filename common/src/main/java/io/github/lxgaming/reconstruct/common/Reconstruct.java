@@ -26,6 +26,7 @@ import io.github.lxgaming.reconstruct.common.manager.TaskManager;
 import io.github.lxgaming.reconstruct.common.manager.TransformerManager;
 import io.github.lxgaming.reconstruct.common.task.TransformTask;
 import io.github.lxgaming.reconstruct.common.task.WriteTask;
+import io.github.lxgaming.reconstruct.common.util.BuildParameters;
 import io.github.lxgaming.reconstruct.common.util.IOUtils;
 import io.github.lxgaming.reconstruct.common.util.StringUtils;
 import io.github.lxgaming.reconstruct.common.util.Toolbox;
@@ -54,7 +55,7 @@ public class Reconstruct {
 
     public static final String ID = "reconstruct";
     public static final String NAME = "Reconstruct";
-    public static final String VERSION = "@version@";
+    public static final String VERSION = BuildParameters.VERSION;
     public static final String AUTHORS = "LX_Gaming";
     public static final String SOURCE = "https://github.com/LXGaming/Reconstruct";
     public static final String WEBSITE = "https://lxgaming.github.io/";
