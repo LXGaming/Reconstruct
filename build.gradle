@@ -5,7 +5,9 @@ plugins {
 }
 
 subprojects {
+    apply plugin: "com.github.johnrengelman.shadow"
     apply plugin: "java"
+    apply plugin: "java-library"
     apply plugin: "maven-publish"
     apply plugin: "org.jetbrains.gradle.plugin.idea-ext"
     apply plugin: "signing"
@@ -21,6 +23,9 @@ subprojects {
     }
 
     java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+
         withJavadocJar()
         withSourcesJar()
     }
@@ -52,7 +57,7 @@ subprojects {
                     licenses {
                         license {
                             name = "The Apache License, Version 2.0"
-                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                            url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
                         }
                     }
                     scm {
