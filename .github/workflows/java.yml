@@ -8,12 +8,14 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+  packages: read
+
 jobs:
   java:
     name: Java
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     defaults:
       run:
         shell: bash {0}
@@ -21,7 +23,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Gradle Wrapper Validation
-      uses: gradle/wrapper-validation-action@v2
+      uses: gradle/actions/wrapper-validation@v4
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
