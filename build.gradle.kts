@@ -6,12 +6,14 @@ plugins {
     id("signing")
     id("com.gradleup.shadow") version "8.3.4" apply false
     id("net.kyori.blossom") version "2.1.0" apply false
+    id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.9" apply false
 }
 
 subprojects {
     apply(plugin = "com.gradleup.shadow")
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
+    apply(plugin = "org.jetbrains.gradle.plugin.idea-ext")
     apply(plugin = "signing")
 
     val annotationsVersion: String by project
