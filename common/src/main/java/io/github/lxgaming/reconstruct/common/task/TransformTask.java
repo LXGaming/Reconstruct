@@ -42,7 +42,7 @@ public class TransformTask extends Task {
 
     @Override
     public boolean prepare() {
-        type(Type.DEFAULT);
+        setType(Type.DEFAULT);
         return true;
     }
 

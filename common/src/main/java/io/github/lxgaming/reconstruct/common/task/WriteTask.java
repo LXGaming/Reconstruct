@@ -53,7 +53,7 @@ public class WriteTask extends Task {
 
     @Override
     public boolean prepare() {
-        type(Type.DEFAULT);
+        setType(Type.DEFAULT);
         getState().set(true);
         return true;
     }
