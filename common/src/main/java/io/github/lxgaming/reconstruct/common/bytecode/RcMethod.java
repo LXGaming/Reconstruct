@@ -55,8 +55,8 @@ public final class RcMethod extends RcBehavior {
 
         RcMethod rcMethod = (RcMethod) obj;
         return Objects.equals(getName(), rcMethod.getName())
-                && Objects.deepEquals(getParameters(), rcMethod.getParameters())
-                && Objects.equals(getReturnType(), rcMethod.getReturnType());
+            && Objects.deepEquals(getParameters(), rcMethod.getParameters())
+            && Objects.equals(getReturnType(), rcMethod.getReturnType());
     }
 
     @Override

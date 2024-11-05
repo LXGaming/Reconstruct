@@ -49,13 +49,13 @@ public class RemapperImpl extends Remapper {
             boolean isFieldHandle = handle.getTag() <= Opcodes.H_PUTSTATIC;
 
             return new Handle(
-                    handle.getTag(),
-                    mapType(handle.getOwner()),
-                    isFieldHandle
-                            ? mapFieldName(handle.getOwner(), handle.getName(), handle.getDesc())
-                            : mapMethodName(handle.getOwner(), handle.getName(), handle.getDesc()),
-                    isFieldHandle ? mapDesc(handle.getDesc()) : mapMethodDesc(handle.getDesc()),
-                    handle.isInterface());
+                handle.getTag(),
+                mapType(handle.getOwner()),
+                isFieldHandle
+                    ? mapFieldName(handle.getOwner(), handle.getName(), handle.getDesc())
+                    : mapMethodName(handle.getOwner(), handle.getName(), handle.getDesc()),
+                isFieldHandle ? mapDesc(handle.getDesc()) : mapMethodDesc(handle.getDesc()),
+                handle.isInterface());
         }
 
         return super.mapValue(value);

@@ -43,9 +43,9 @@ public class Main {
 
         try {
             JCommander.newBuilder()
-                    .addObject(Reconstruct.getInstance().getConfig())
-                    .build()
-                    .parse(args);
+                .addObject(Reconstruct.getInstance().getConfig())
+                .build()
+                .parse(args);
         } catch (Exception ex) {
             Reconstruct.getInstance().getLogger().error("Encountered an error while parsing arguments", ex);
             Runtime.getRuntime().exit(-1);

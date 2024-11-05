@@ -48,9 +48,9 @@ public class ClassVisitorImpl extends ClassVisitor {
 
         int arguments = Toolbox.countArguments(Type.getMethodType(descriptor));
         return new MethodVisitorImpl(
-                methodVisitor,
-                (access & Opcodes.ACC_STATIC) != 0,
-                arguments
+            methodVisitor,
+            (access & Opcodes.ACC_STATIC) != 0,
+            arguments
         );
     }
 }

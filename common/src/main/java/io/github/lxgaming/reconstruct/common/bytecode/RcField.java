@@ -53,7 +53,7 @@ public final class RcField extends RcMember {
 
         RcField rcField = (RcField) obj;
         return Objects.equals(getName(), rcField.getName())
-                && Objects.deepEquals(getType(), rcField.getType());
+            && Objects.deepEquals(getType(), rcField.getType());
     }
 
     @Override

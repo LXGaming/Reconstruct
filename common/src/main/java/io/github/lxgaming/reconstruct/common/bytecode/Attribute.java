@@ -97,7 +97,7 @@ public final class Attribute {
 
             Key<?> key = (Key<?>) obj;
             return Objects.equals(getName(), key.getName())
-                    && Objects.equals(getType(), key.getType());
+                && Objects.equals(getType(), key.getType());
         }
 
         @Override

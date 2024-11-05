@@ -56,7 +56,7 @@ public final class RcConstructor extends RcBehavior {
 
         RcConstructor rcConstructor = (RcConstructor) obj;
         return Objects.equals(getName(), rcConstructor.getName())
-                && Objects.deepEquals(getParameters(), rcConstructor.getParameters());
+            && Objects.deepEquals(getParameters(), rcConstructor.getParameters());
     }
 
     @Override
